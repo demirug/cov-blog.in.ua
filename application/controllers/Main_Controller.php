@@ -13,7 +13,7 @@ class Main_Controller extends Controller
     }
 
     public function index_Action($args) {
-        $this->view->render('Main page', ['kek' => '23']);
+        $this->view->render('Main page', ['kek' => '23'], ['/public/js/test.js']);
     }
 
     public function test_Action($argument) {

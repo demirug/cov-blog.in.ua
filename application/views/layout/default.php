@@ -5,6 +5,9 @@
 
     <title> <?php echo $title; ?> </title>
 
+    <?php foreach($js as $path): ?>
+        <script type="text/javascript" src=<?php echo $path; ?>></script>
+    <?php endforeach; ?>
 </head>
 
 <body>

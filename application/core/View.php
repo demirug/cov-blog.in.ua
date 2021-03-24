@@ -13,7 +13,7 @@ class View
         $this->route = $route;
     }
 
-    public function render($title, $params = []) {
+    public function render($title, $params = [], $js = []) {
 
         extract($params);
 
