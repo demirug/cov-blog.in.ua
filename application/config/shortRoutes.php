@@ -12,4 +12,14 @@
             'action' => 'contact'
         ],
 
+        'login' => [
+            'controller' => 'Account',
+            'action' => 'login'
+        ],
+
+        'register' => [
+            'controller' => 'Account',
+            'action' => 'register'
+        ],
+
     ];

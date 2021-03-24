@@ -1,1 +1,1 @@
-index page of Main controller
+<h1>Map of Ukraine</h1>
