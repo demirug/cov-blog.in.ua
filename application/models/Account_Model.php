@@ -11,6 +11,65 @@ class Account_Model extends Model
         return require 'application/config/authorization.php';
     }
 
+    public function checkRegister() {
+
+        $settings = require 'application/config/authorization.php';
+        $errors = array();
+
+        $login = $_POST['login'];
+        $password = $_POST['password'];
+        $confirmPassword = $_POST['conf_password'];
+
+
+        //-----
+
+        if($password !== $confirmPassword) {
+            array_push($errors,'Пароли не совпадают');
+        } else {
+
+            if (strlen($password) < $settings['min-password-length']) {
+                array_push($errors, 'Слишком короткий пароль. Минимальная длина ' . $settings['min-password-length'] . ' символов');
+            }
+
+            if (strlen($login) > $settings['max-password-length']) {
+                array_push($errors, 'Слишком длинный логин. Максимальная длина ' . $settings['max-password-length'] . ' символов');
+            }
+
+            if (!preg_match($settings['password-filter'], $login)) {
+                array_push($errors, 'Пароль содержит недопустимые символы. Допустимо только латинский алфавит и цифры');
+            }
+        }
+
+        //----
+
+        $user = $this->database->query('SELECT login FROM Users WHERE login = :login', ['login' => $login])->fetch(\PDO::FETCH_ASSOC);
+        if(isset($user) && !empty($user)) {
+            array_push($errors,'Пользователь с данным логином уже существует');
+        } else {
+
+            if (strlen($login) < $settings['min-login-length']) {
+                array_push($errors, 'Слишком короткий логин. Минимальная длина ' . $settings['min-login-length'] . ' символов');
+            }
+
+            if (strlen($login) > $settings['max-login-length']) {
+                array_push($errors, 'Слишком длинный логин. Максимальная длина ' . $settings['max-login-length'] . ' символов');
+            }
+
+            if (!preg_match($settings['login-filter'], $login)) {
+                array_push($errors, 'Логин имеет недопустимые символы. Допустимо только латинский алфавит и цифры');
+            }
+        }
+
+        //----
+
+        if(empty($errors)) {
+            array_push($errors, 'OK');
+
+        }
+
+        return $errors;
+    }
+
     public function onInitialize()
     {
         $this->database->dbConnection->exec("
