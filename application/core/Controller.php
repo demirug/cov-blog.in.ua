@@ -2,6 +2,8 @@
 
 namespace application\core;
 
+use application\models;
+
 abstract class Controller
 {
 
@@ -13,6 +15,13 @@ abstract class Controller
     public function __construct($route)
     {
         $this->view = new View($route);
+        $this->route = $route;
+
+        $modelPath = 'application\models\\' . $this->route['controller'].'_Model';
+        if (class_exists($modelPath)) {
+            $model = new $modelPath();
+            $model->onInitialize();
+        }
 
     }
 
