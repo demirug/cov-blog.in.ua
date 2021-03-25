@@ -35,4 +35,14 @@ class View
         exit();
     }
 
+
+    // formHandler.js has handler for this json messages. Used with AJAX
+    public static function location($url) {
+        exit(json_encode(['url' => $url]));
+    }
+
+    public static function sendMessage($title, $message, $code = 1) {
+        exit(json_encode(['title' => $title, 'message' => $message, 'code' => $code]));
+    }
+
 }
