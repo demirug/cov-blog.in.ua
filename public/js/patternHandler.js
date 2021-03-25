@@ -3,7 +3,7 @@ $(document).ready(function () {
 
     $("input").keypress(function (e) {
 
-        var attr = $(this).attr('pattern');
+        var attr = $(this).attr('regex');
 
         if(attr === undefined || attr === false) return;
 
