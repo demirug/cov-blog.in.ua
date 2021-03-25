@@ -24,17 +24,44 @@ class Account_Controller extends Controller
     }
 
     public function login_Action() {
-        $this->view->render('Login page', [], ['/public/js/patternHandler.js']);
+
+        if(isset($_SESSION['userID'])) {
+            View::redirect('/');
+        }
+
+        if(!empty($_POST)) {
+
+            $result = $this->model->checkLogin();
+
+            if($result !== -1) {
+
+                $_SESSION["userID"] = $result;
+                View::location('/');
+
+            } else  View::sendMessage('Error', "Неверный логин или пароль", 3);
+
+            return;
+        }
+
+        $this->view->render('Login page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js']);
     }
 
     public function register_Action() {
+
+        if(isset($_SESSION['userID'])) {
+            View::redirect('/');
+        }
+
         if(!empty($_POST)) {
 
             $result = $this->model->checkRegister();
 
             if($result[0] === 'OK') {
                 $this->model->database->query("INSERT INTO `users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => $_POST['login'], 'hash' => $_POST['password'], 'sault' => 'saultWillBeSoon', 'email' => 'emailWillBeSoon']);
-                View::location('/login');
+
+                $_SESSION["userID"] = $this->model->database->lastInsertId();;
+                View::location('/');
+
             } else  View::sendMessage('Error', $result, 3);
 
             return;

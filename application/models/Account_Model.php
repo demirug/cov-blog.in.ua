@@ -70,6 +70,19 @@ class Account_Model extends Model
         return $errors;
     }
 
+    //If user with login and password founded returned his id. else return -1
+    public function checkLogin() {
+        $login = $_POST['login'];
+        $password = $_POST['password'];
+
+        $user = $this->database->query('SELECT id FROM Users WHERE login = :login AND hash = :password', ['login' => $login, 'password' => $password])->fetch(\PDO::FETCH_ASSOC);
+        
+        if(isset($user) && !empty($user)) {
+            return $user['id'];
+        } else return -1;
+
+    }
+
     public function onInitialize()
     {
         $this->database->dbConnection->exec("
