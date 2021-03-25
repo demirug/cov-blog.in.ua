@@ -20,7 +20,8 @@ class Account_Controller extends Controller
     }
 
     public function logout_Action() {
-        $this->view->render('Logout page');
+        unset($_SESSION['userID']);
+        View::redirect('/login');
     }
 
     public function login_Action() {

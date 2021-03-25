@@ -22,4 +22,9 @@
             'action' => 'register'
         ],
 
+        'logout' => [
+            'controller' => 'Account',
+            'action' => 'logout'
+        ]
+
     ];
