@@ -19,8 +19,8 @@ abstract class Controller
 
         $modelPath = 'application\models\\' . $this->route['controller'].'_Model';
         if (class_exists($modelPath)) {
-            $model = new $modelPath();
-            $model->onInitialize();
+            $this->model = new $modelPath();
+            $this->model->onInitialize();
         }
 
     }
