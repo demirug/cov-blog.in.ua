@@ -2,22 +2,24 @@ $(document).ready(function () {
 
     $('.modal').click(function (e) {
         if(e.target.id === 'modal') {
-            $(this).css('display', 'none');
-            $('.modal-body > p').remove();
+            closeModal();
         }
     });
 
     $('.modal-content > .close').click(function () {
-        $('.modal').css('display', 'none');
-        $('.modal-body > p').remove();
+        closeModal();
     });
 
     $('.modal-footer > button').click(function () {
-        $('.modal').css('display', 'none');
-        $('.modal-body > p').remove();
+       closeModal();
     });
 
 });
+
+function closeModal() {
+    $('.modal').css('display', 'none');
+    $('.modal-body > p').remove();
+}
 
 /*
 * Codes
@@ -38,4 +40,5 @@ function showMessage(title, message, messageCode = 1) {
     $('.modal-header > h2').text(title);
     $('.modal-header').css('background-color', (messageCode === 1 ? '#01d8ff' : (messageCode === 2 ? '#ffa500' : messageCode === 3 ? '#FF0000' : '#01d8ff')));
     $('.modal').css('display', 'block');
+    $('.modal-footer > button').focus();
 }

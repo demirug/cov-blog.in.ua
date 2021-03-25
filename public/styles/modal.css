@@ -53,9 +53,9 @@
     background-position: 100%;
     background-size: 400%;
     transition: background 300ms ease-in-out;
-
+    outline:none;
 }
-.but:hover, .but:focus {
+.but:hover {
     color: #fff;
     outline: 0;
     background-position: 0;
