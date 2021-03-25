@@ -1,17 +1,20 @@
-$(document).ready(function (func) {
+$(document).ready(function () {
 
     $('.modal').click(function (e) {
         if(e.target.id === 'modal') {
             $(this).css('display', 'none');
+            $('.modal-body > p').remove();
         }
     });
 
     $('.modal-content > .close').click(function () {
         $('.modal').css('display', 'none');
+        $('.modal-body > p').remove();
     });
 
     $('.modal-footer > button').click(function () {
         $('.modal').css('display', 'none');
+        $('.modal-body > p').remove();
     });
 
 });
