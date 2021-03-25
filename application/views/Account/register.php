@@ -6,13 +6,13 @@
         <form action="/register" method="post">
 
             <div>
-                <input type="text" style="padding: 12px 20px; margin: 8px 0" name="login" placeholder="Enter login" regex="[A-Za-z]" required>
+                <input type="text" style="padding: 12px 20px; margin: 8px 0" name="login" placeholder="Enter login" regex="[A-Za-z0-9]" required>
             </div>
             <div>
                 <input type="password" style="padding: 12px 20px; margin: 8px 0" name="password" placeholder="Enter password" required>
             </div>
             <div>
-                <input type="password" style="padding: 12px 20px; margin: 8px 0" name="password" placeholder="Confirm password" required>
+                <input type="password" style="padding: 12px 20px; margin: 8px 0" name="conf_password" placeholder="Confirm password" required>
             </div>
             <div>
                 <input type="submit" style="padding: 12px 20px; margin: 8px 0" name="submit", value="Submit">
