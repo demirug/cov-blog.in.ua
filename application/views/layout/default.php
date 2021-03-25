@@ -18,13 +18,23 @@
 <body>
 
 <!-- The Modal -->
-<div class="modal">
-
+<div class="modal" id = "modal">
     <div class="modal-content">
-        <span class="close">×</span>
-        <p>Message</p>
-    </div>
 
+        <span class="close">×</span>
+
+        <div class="modal-header">
+            <h2>TITLE</h2>
+        </div>
+
+        <div class="modal-body">
+        </div>
+
+        <div class="modal-footer">
+            <button class="but">ok</button>
+        </div>
+
+    </div>
 </div>
 <!-- Modal end -->
 
