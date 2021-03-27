@@ -2,8 +2,6 @@
 
 namespace application\core;
 
-use application\controllers;
-
 class Router
 {
 
@@ -19,13 +17,15 @@ class Router
         $address = trim($_SERVER['REQUEST_URI'], '/');
         $url = explode('/', $address);
 
-        $controllerName = '';
+        $isShortRoute = false;
+
         $controllerPath = 'application\controllers\\';
         $method = 'index_Action';
 
         if(array_key_exists($url[0], $this->shortRoutes)) {
             $controllerPath .= $this->shortRoutes[$url[0]]['controller'] . '_Controller';
             $method = $this->shortRoutes[$url[0]]['action'] . '_Action';
+            $isShortRoute = true;
         } else {
 
             $controllerPath .= ucfirst($url[0]) . '_Controller';
@@ -46,8 +46,8 @@ class Router
 
         $args = null;
 
-        if(count($url) > 2) {
-            $args = array_slice($url, 2);
+        if(count($url) > ($isShortRoute ? 1 : 2)) {
+            $args = array_slice($url, ($isShortRoute ? 1 : 2));
         }
 
         //echo $controllerPath . '|' . $method;
