@@ -1,7 +1,6 @@
 <?php
-    //Short routs can't contain arguments
+    //Short route to main page can't contain arguments
     return [
-
         '' => [
             'controller' => 'Main',
             'action' => 'index'
@@ -25,6 +24,11 @@
         'logout' => [
             'controller' => 'Account',
             'action' => 'logout'
+        ],
+
+        'blog' => [
+            'controller' => 'Blog',
+            'action' => 'index'
         ]
 
     ];
