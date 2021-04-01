@@ -14,7 +14,7 @@ class Router
 
     public function run() {
 
-        $address = trim($_SERVER['REQUEST_URI'], '/');
+        $address = strtolower(trim($_SERVER['REQUEST_URI'], '/'));
         $url = explode('/', $address);
 
         $isShortRoute = false;
@@ -49,8 +49,6 @@ class Router
         if(count($url) > ($isShortRoute ? 1 : 2)) {
             $args = array_slice($url, ($isShortRoute ? 1 : 2));
         }
-
-        //echo $controllerPath . '|' . $method;
 
        $controller = new $controllerPath(['controller' => array_key_exists($url[0], $this->shortRoutes) ? $this->shortRoutes[$url[0]]['controller'] : ucfirst($url[0]), 'action' => substr($method, 0, -7)]);
        $controller->$method($args);
