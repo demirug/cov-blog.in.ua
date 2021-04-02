@@ -23,6 +23,8 @@ abstract class Controller
             $this->model->onInitialize();
         }
 
+        $this->onInitialize();
+
     }
 
     public abstract function onInitialize();
