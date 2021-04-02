@@ -1,0 +1,54 @@
+body{
+    background-image: url("/public/images/errors/background.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    margin:0;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+.error-wrap{
+    width:100%;
+    height:100%;
+    margin: 0;
+    position:relative;
+}
+.error{
+    width:100%;
+    max-width:625px;
+    min-height:570px;
+    margin: 120px auto;
+    position:relative;
+    line-height: 1.5;
+    color: #4d9ca8;
+
+}
+.but {
+    box-sizing: border-box;
+    background-color: #00bcd4;
+    border: 2px solid #01d8ff;
+    border-radius: 0.6em;
+    cursor: pointer;
+    display: flex;
+    align-self: center;
+    line-height: 0.5;
+    margin: 20px;
+    padding: 1.2em 2.8em;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    color: #000;
+    background-image: linear-gradient(45deg, #01d8ff 50%, transparent 50%);
+    background-position: 100%;
+    background-size: 400%;
+    transition: background 300ms ease-in-out;
+
+}
+.but:hover, .but:focus {
+    color: #fff;
+    outline: 0;
+    background-position: 0;
+}
