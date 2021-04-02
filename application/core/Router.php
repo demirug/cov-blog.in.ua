@@ -34,7 +34,7 @@ class Router
                 View::error(404);
             }
 
-            $args = array_shift($url);
+            array_shift($args);
 
             if(isset($url[1])) {
 
