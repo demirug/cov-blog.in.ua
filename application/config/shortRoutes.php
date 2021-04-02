@@ -1,5 +1,4 @@
 <?php
-    //Short route to main page can't contain arguments
     return [
         '' => [
             'controller' => 'Main',
@@ -26,9 +25,24 @@
             'action' => 'logout'
         ],
 
-        'blog' => [
+        'blogs' => [
             'controller' => 'Blog',
-            'action' => 'index'
-        ]
+            'action' => 'blogs'
+        ],
+
+        'view' => [
+            'controller' => 'Blog',
+            'action' => 'view'
+        ],
+
+        'edit' => [
+            'controller' => 'Blog',
+            'action' => 'edit'
+        ],
+
+        'add' => [
+            'controller' => 'Blog',
+            'action' => 'add'
+        ],
 
     ];
