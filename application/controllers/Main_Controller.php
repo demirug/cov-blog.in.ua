@@ -16,10 +16,6 @@ class Main_Controller extends Controller
         $this->view->render('Main page');
     }
 
-    public function test_Action($argument) {
-
-    }
-
     public function contact_Action() {
         $this->view->render("Обратная связь");
     }
