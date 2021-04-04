@@ -75,7 +75,7 @@ class Account_Model extends Model
         $login = $_POST['login'];
         $password = $_POST['password'];
 
-        $user = $this->database->query('SELECT id FROM Users WHERE login = :login AND hash = :password', ['login' => $login, 'password' => $password])->fetch(\PDO::FETCH_ASSOC);
+        $user = $this->database->query('SELECT id FROM Users WHERE login = :login AND hash = :password', ['login' => strtolower($login), 'password' => $password])->fetch(\PDO::FETCH_ASSOC);
         
         if(isset($user) && !empty($user)) {
             return $user['id'];
@@ -104,6 +104,7 @@ class Account_Model extends Model
                     `userid` int NOT NULL,
                     `title` varchar(180) NOT NULL,
                     `description` varchar(1200) NOT NULL,
+                    `region` varchar(16) NOT NULL,
                     `createDate` DATE DEFAULT (CURRENT_DATE),
                     PRIMARY KEY (`blogid`)
                 ) DEFAULT CHARSET=utf8 COLLATE utf8_bin AUTO_INCREMENT=0
