@@ -1,3 +1,5 @@
+
+var redirect = null;
 $(document).ready(function () {
 
     $('.modal').click(function (e) {
@@ -19,6 +21,10 @@ $(document).ready(function () {
 function closeModal() {
     $('.modal').css('display', 'none');
     $('.modal-body > p').remove();
+    if(redirect != null) {
+        window.location.href = redirect;
+        redirect = null;
+    }
 }
 
 /*
@@ -27,7 +33,14 @@ function closeModal() {
 * 2 - WARN
 * 3 - ERROR
 */
-function showMessage(title, message, messageCode = 1) {
+
+function showMessage(title, message, messageCode = 1, closeModalTimerMS = -1, redirectOnClose = null) {
+
+    redirect = redirectOnClose;
+
+    if(closeModalTimerMS !== -1) {
+        setTimeout(closeModal, closeModalTimerMS);
+    }
 
     if(Array.isArray(message)) {
         for (let element of message.values()) {
@@ -38,7 +51,7 @@ function showMessage(title, message, messageCode = 1) {
     }
 
     $('.modal-header > h2').text(title);
-    $('.modal-header').css('background-color', (messageCode === 1 ? '#01d8ff' : (messageCode === 2 ? '#ffa500' : messageCode === 3 ? '#FF0000' : '#01d8ff')));
+    $('.modal-header').css('background-color', (messageCode === 1 ? '#01d8ff' : (messageCode === 2 ? '#ffa500' : messageCode === 3 ? '#ff0000' : '#01d8ff')));
     $('.modal').css('display', 'block');
     $('.modal-footer > button').focus();
 }

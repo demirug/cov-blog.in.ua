@@ -15,8 +15,8 @@ $(document).ready(function() {
                     if (json.url) {
                         window.location.href = json.url;
                     } else {
-                        if(json.code && json.message && json.title) {
-                            showMessage(json.title, json.message, json.code);
+                        if(json.code && json.message && json.title && json.redirect && json.modalTimer) {
+                            showMessage(json.title, json.message, json.code, json.modalTimer, json.redirect);
                         }
                     }
                 } catch (e) {}

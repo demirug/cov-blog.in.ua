@@ -41,8 +41,8 @@ class View
         exit(json_encode(['url' => $url]));
     }
 
-    public static function sendMessage($title, $message, $code = 1) {
-        exit(json_encode(['title' => $title, 'message' => $message, 'code' => $code]));
+    public static function sendMessage($title, $message, $code = 1, $closeModalTimerMS = -1, $redirectOnClose = null) {
+        exit(json_encode(['title' => $title, 'message' => $message, 'code' => $code, 'modalTimer' => $closeModalTimerMS, 'redirect' => $redirectOnClose]));
     }
 
 }
