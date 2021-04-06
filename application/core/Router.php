@@ -14,7 +14,7 @@ class Router
 
     public function run() {
 
-        $address = strtolower(trim($_SERVER['REQUEST_URI'], '/'));
+        $address = trim($_SERVER['REQUEST_URI'], '/');
         $url = explode('/', $address);
 
         $controllerPath = 'application\controllers\\';
