@@ -11,10 +11,11 @@ class Account_Model extends Model
         return require 'application/config/authorization.php';
     }
 
+    //If has troubles with registration exists will be returned error messages else returned OK
     public function checkRegister() {
 
         $settings = require 'application/config/authorization.php';
-        $errors = array();
+        $message = array();
 
         $login = $_POST['login'];
         $password = $_POST['password'];
@@ -24,19 +25,19 @@ class Account_Model extends Model
         //-----
 
         if($password !== $confirmPassword) {
-            array_push($errors,'Пароли не совпадают');
+            array_push($message,'Пароли не совпадают');
         } else {
 
             if (strlen($password) < $settings['min-password-length']) {
-                array_push($errors, 'Слишком короткий пароль. Минимальная длина ' . $settings['min-password-length'] . ' символов');
+                array_push($message, 'Слишком короткий пароль. Минимальная длина ' . $settings['min-password-length'] . ' символов');
             }
 
             if (strlen($login) > $settings['max-password-length']) {
-                array_push($errors, 'Слишком длинный логин. Максимальная длина ' . $settings['max-password-length'] . ' символов');
+                array_push($message, 'Слишком длинный логин. Максимальная длина ' . $settings['max-password-length'] . ' символов');
             }
 
             if (!preg_match($settings['password-filter'], $login)) {
-                array_push($errors, 'Пароль содержит недопустимые символы. Допустимо только латинский алфавит и цифры');
+                array_push($message, 'Пароль содержит недопустимые символы. Допустимо только латинский алфавит и цифры');
             }
         }
 
@@ -44,41 +45,41 @@ class Account_Model extends Model
 
         $user = $this->database->query('SELECT login FROM Users WHERE login = :login', ['login' => $login])->fetch(\PDO::FETCH_ASSOC);
         if(isset($user) && !empty($user)) {
-            array_push($errors,'Пользователь с данным логином уже существует');
+            array_push($message,'Пользователь с данным логином уже существует');
         } else {
 
             if (strlen($login) < $settings['min-login-length']) {
-                array_push($errors, 'Слишком короткий логин. Минимальная длина ' . $settings['min-login-length'] . ' символов');
+                array_push($message, 'Слишком короткий логин. Минимальная длина ' . $settings['min-login-length'] . ' символов');
             }
 
             if (strlen($login) > $settings['max-login-length']) {
-                array_push($errors, 'Слишком длинный логин. Максимальная длина ' . $settings['max-login-length'] . ' символов');
+                array_push($message, 'Слишком длинный логин. Максимальная длина ' . $settings['max-login-length'] . ' символов');
             }
 
             if (!preg_match($settings['login-filter'], $login)) {
-                array_push($errors, 'Логин имеет недопустимые символы. Допустимо только латинский алфавит и цифры');
+                array_push($message, 'Логин имеет недопустимые символы. Допустимо только латинский алфавит и цифры');
             }
         }
 
         //----
 
-        if(empty($errors)) {
-            array_push($errors, 'OK');
+        if(empty($message)) {
+            array_push($message, 'OK');
 
         }
 
-        return $errors;
+        return $message;
     }
 
-    //If user with login and password founded returned his id. else return -1
+    //If user with login and password founded returned his id and permission level else return -1
     public function checkLogin() {
         $login = $_POST['login'];
         $password = $_POST['password'];
 
-        $user = $this->database->query('SELECT id FROM Users WHERE login = :login AND hash = :password', ['login' => strtolower($login), 'password' => $password])->fetch(\PDO::FETCH_ASSOC);
+        $user = $this->database->query('SELECT id, permissionLevel FROM Users WHERE login = :login AND hash = :password', ['login' => strtolower($login), 'password' => $password])->fetch(\PDO::FETCH_ASSOC);
         
         if(isset($user) && !empty($user)) {
-            return $user['id'];
+            return array($user['id'], $user['permissionLevel']);
         } else return -1;
 
     }
