@@ -1,9 +1,3 @@
-<button onclick="window.location.href='/blogs/vinnytsia'">Vinnytsia</button>
-<button onclick="window.location.href='/blogs/dnipro'">Dnipro</button>
-<button onclick="window.location.href='/blogs/donetsk'">Donetsk</button>
-<button onclick="window.location.href='/blogs/kiev'">Kiev</button>
-<button onclick="window.location.href='/blogs/lutsk'">Lutsk</button>
-<button onclick="window.location.href='/blogs/lviv'">Lviv</button>
-<button onclick="window.location.href='/blogs/odesa'">Odesa</button>
-<button onclick="window.location.href='/blogs/simferopol'">Simferopol</button>
-<button onclick="window.location.href='/blogs/kharkiv'">Kharkiv</button>
+ <?php foreach (application\models\Blog_Model::regionList() as $value):?>
+        <button onclick="window.location.href='/blogs/<?php echo $value;?>'"><?php echo ucfirst($value);?></button>
+ <?php endforeach;?>
