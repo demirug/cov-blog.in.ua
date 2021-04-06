@@ -1,5 +1,9 @@
 $(document).ready(function() {
     $('form').submit(function(event) {
+
+        if(typeof CKEDITOR !== 'undefined') {
+           CKEDITOR.instances['editor'].updateElement();
+        }
         var json;
         event.preventDefault();
         $.ajax({
@@ -15,7 +19,7 @@ $(document).ready(function() {
                     if (json.url) {
                         window.location.href = json.url;
                     } else {
-                        if(json.code && json.message && json.title && json.redirect && json.modalTimer) {
+                        if(json.message) {
                             showMessage(json.title, json.message, json.code, json.modalTimer, json.redirect);
                         }
                     }
