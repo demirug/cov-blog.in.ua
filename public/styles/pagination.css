@@ -1,0 +1,23 @@
+a {
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    border: 1px solid blue;
+    border-radius: 8px;
+    padding: 3px 5px 3px 5px;
+}
+
+a.selected {
+    background-color: cyan;
+}
+
+a.control {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+a:hover:not(.selected) {
+    background-color: red;
+}
