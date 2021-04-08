@@ -44,6 +44,14 @@ class Blog_Model extends Model
         return  $statement->fetchAll();
     }
 
+    public function getBlogsCountByUser($userName) {
+        $userID = $this->getUserID($userName);
+
+        if($userID === -1) return 0;
+        $statement = $this->database->query("SELECT COUNT(*) as count FROM `BlogList` WHERE userId = '$userID'");
+
+        return $statement->fetch()['count'];
+    }
 
     public function getBlogIDByName($userID, $blogName) {
         $statement = $this->database->query("SELECT login as username, blogid FROM BlogList JOIN Users ON userID = '$userID' AND title = '$blogName'");
@@ -60,7 +68,12 @@ class Blog_Model extends Model
 
         $statement = $this->database->query("SELECT login as username, title, description, createDate, region FROM BlogList JOIN Users ON userID = id WHERE region = '$regName' LIMIT  $blogsPerPage OFFSET " . ($pageNumber - 1) * $blogsPerPage);
         return $statement->fetchAll();
+    }
 
+    public function getBlogsCountByRegion($regName) {
+        $statement = $this->database->query("SELECT COUNT(*) as count FROM BlogList WHERE region = '$regName'");
+
+        return $statement->fetch()['count'];
     }
 
     public function onInitialize() {}
