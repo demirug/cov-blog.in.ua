@@ -4,6 +4,7 @@ namespace application\controllers;
 
 use application\core\Controller;
 use application\core\View;
+use application\libs\Pagination;
 
 class Blog_Controller extends Controller
 {
@@ -57,6 +58,10 @@ class Blog_Controller extends Controller
                     echo "<span>To read blog <a href='/view/" . $value['username'] . '/' . str_replace(' ', '-', $value['title']) . "'>click here</a></span><br><hr>";
                 }
 
+                $pagination = new Pagination($this->model->getBlogsCountByRegion($args[0]), $blogsPerPage);
+                $pagination->setRedirectURL('/blogs/'.$args[0]);
+                $pagination->setPageNumber($pageNumber);
+                $pagination->renderPagination();
 
             } else {
 
@@ -69,6 +74,11 @@ class Blog_Controller extends Controller
                         echo  $value['title'] . ' | ' . $value['description'] . ' | Created: ' . $value['createDate'] . '<br>';
                         echo "<span>To read blog <a href='/view/$args[0]/" . str_replace(' ', '-', $value['title']) . "'>click here</a></span><br><hr>";
                     }
+
+                    $pagination = new Pagination($this->model->getBlogsCountByUser($args[0]), $blogsPerPage);
+                    $pagination->setRedirectURL('/blogs/'.$args[0]);
+                    $pagination->setPageNumber($pageNumber);
+                    $pagination->renderPagination();
 
                 } else {
                     View::error(404);
