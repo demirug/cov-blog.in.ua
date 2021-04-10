@@ -54,9 +54,14 @@ class Blog_Model extends Model
     }
 
     public function getBlogIDByName($userID, $blogName) {
-        $statement = $this->database->query("SELECT login as username, blogid FROM BlogList JOIN Users ON userID = '$userID' AND title = '$blogName'");
+        $statement = $this->database->query("SELECT blogid FROM BlogList WHERE userid = '$userID' and title = '$blogName'");
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
         return ($result ? $result['blogid'] : -1);
+    }
+
+    public function getBlogByID($blogID) {
+        $statement = $this->database->query("SELECT * FROM BlogList WHERE blogid = '$blogID'");
+        return $statement->fetch(\PDO::FETCH_ASSOC);
     }
 
     public function getPostsByUser($blogID, $pageNumber, $blogsPerPage) {
