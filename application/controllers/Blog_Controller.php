@@ -21,6 +21,7 @@ class Blog_Controller extends Controller
      * cov-blog.in.ua/view/{userName}/{blogName/blogid}/{page}
      *
      * cov-blog.in.ua/edit/{blogid}
+     * cov-blog.in.ua/edit/{blogid}/{recordDate}
      * cov-blog.in.ua/add/{blogName}
     */
 
@@ -126,6 +127,7 @@ class Blog_Controller extends Controller
         //If current user is blog author.. Adding button for creation new record to current blog
         if(isset($_SESSION['userID']) && $_SESSION['userID'] === $userID) {
             echo "<center><input type='button' onclick=\"location.href='/add/$args[1]';\" value='Add record'></center>";
+            echo "<center><input type='button' onclick=\"location.href='/edit/$args[1]';\" value='Edit blog settings'></center>";
         }
     }
 
@@ -181,6 +183,31 @@ class Blog_Controller extends Controller
     }
 
     public function edit_Action($args) {
+
+        $argsLength = count($args);
+
+        if($argsLength == 0) {
+            View::redirect('/');
+        }
+
+        if(!isset($_SESSION['userID'])) {
+            View::error(403);
+        }
+
+        $blogID = $this->model->getBlogIDByName($_SESSION['userID'],  str_replace("-", " ", $args[0]));
+
+        if($blogID === -1) {
+            View::error(403);
+        }
+
+        $blog = $this->model->getBlogByID($blogID);
+
+        if(!empty($_POST)) {
+            $this->model->database->query("UPDATE BlogList SET title = :title, description = :description, region = :region WHERE blogid = :blogid", ["title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region'], "blogid" => $blogID]);
+            View::sendMessage("Success", "Blog configuration updated", 1, 1000, ('/view/' . $_SESSION['userName'] .'/'. str_replace(" ", "-", $_POST['title'])));
+        }
+
+        $this->view->render("Edit blog", ["blogName"=> $blog['title'], "blogDescription"=> $blog['description'], "blogRegion" => $blog['region']], ['/public/js/formHandler.js']);
 
     }
 
