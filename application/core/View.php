@@ -14,11 +14,15 @@ class View
     }
 
     public function render($title, $params = [], $js = []) {
+        $this->renderPath($this->route['action'], $title, $params, $js);
+    }
+
+    public function renderPath($path, $title, $params = [], $js = []) {
 
         extract($params);
 
         ob_start();
-        require 'application/views/' . $this->route['controller'] . '/' . $this->route['action'] . '.php';
+        require 'application/views/' . $this->route['controller'] . '/' . $path . '.php';
         $content = ob_get_clean();
 
         require 'application/views/layout/' . $this->layout. '.php';
