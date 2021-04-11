@@ -57,7 +57,9 @@ class Account_Controller extends Controller
             $result = $this->model->checkRegister(); //Return error is exists or OK message
 
             if($result[0] === 'OK') {
-                $this->model->database->query("INSERT INTO `users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => strtolower($_POST['login']), 'hash' => $_POST['password'], 'sault' => 'saultWillBeSoon', 'email' => 'emailWillBeSoon']);
+                $sault = $this->model->generateSault();
+
+                $this->model->database->query("INSERT INTO `users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => strtolower($_POST['login']), 'hash' => $this->model->hash($_POST['password'], $sault), 'sault' => $sault, 'email' => 'emailWillBeSoon']);
 
                 View::sendMessage('Successful', 'Вы успешно зарегистрировались! Теперь авторизуйтесь', 1, 1300, '/login');
 

@@ -79,12 +79,38 @@ class Account_Model extends Model
         $login = $_POST['login'];
         $password = $_POST['password'];
 
-        $user = $this->database->query('SELECT id, permissionLevel FROM Users WHERE login = :login AND hash = :password', ['login' => strtolower($login), 'password' => $password])->fetch(\PDO::FETCH_ASSOC);
+        $user = $this->database->query('SELECT id, permissionLevel, hash, sault FROM Users WHERE login = :login', ['login' => strtolower($login)])->fetch(\PDO::FETCH_ASSOC);
         
         if(isset($user) && !empty($user)) {
-            return array($user['id'], $user['permissionLevel']);
+
+            if($this->hash($_POST['password'], $user['sault']) === $user['hash']) {
+                return array($user['id'], $user['permissionLevel']);
+            } else return -1;
         } else return -1;
 
+    }
+
+    function generateSault() {
+        $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\][{}\'";:?.>,<!@#$%^&*()-_=+|';
+        $randStringLen = 16;
+
+        $randString = "";
+        for ($i = 0; $i < $randStringLen; $i++) {
+            $randString .= $charset[mt_rand(0, strlen($charset) - 1)];
+        }
+
+        return $randString;
+    }
+
+    public function hash($password, $sault) {
+
+        $hash = $password . $sault;
+
+        for($i = 0; $i < 10; $i++) {
+            $hash = hash('sha256', $hash);
+        }
+
+        return $hash;
     }
 
 }
