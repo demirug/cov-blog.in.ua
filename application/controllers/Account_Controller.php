@@ -8,7 +8,9 @@ use application\core\View;
 class Account_Controller extends Controller
 {
 
-    public function onInitialize() {}
+    public function onInitialize() {
+        $this->view->layout = "account";
+    }
 
     public function index_Action($args)
     {
@@ -59,7 +61,7 @@ class Account_Controller extends Controller
             if($result[0] === 'OK') {
                 $sault = $this->model->generateSault();
 
-                $this->model->database->query("INSERT INTO `users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => strtolower($_POST['login']), 'hash' => $this->model->hash($_POST['password'], $sault), 'sault' => $sault, 'email' => 'emailWillBeSoon']);
+                $this->model->database->query("INSERT INTO `users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => strtolower($_POST['login']), 'hash' => $this->model->hash($_POST['password'], $sault), 'sault' => $sault, 'email' => $_POST['email']]);
 
                 View::sendMessage('Successful', 'Вы успешно зарегистрировались! Теперь авторизуйтесь', 1, 1300, '/login');
 
