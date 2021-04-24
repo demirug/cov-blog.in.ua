@@ -23,6 +23,7 @@ class Account_Model extends Model
         $login = $_POST['login'];
         $password = $_POST['password'];
         $confirmPassword = $_POST['conf_password'];
+        $email = $_POST['email'];
 
 
         //-----
@@ -62,6 +63,18 @@ class Account_Model extends Model
             if (!preg_match($settings['login-filter'], $login)) {
                 array_push($message, 'Логин имеет недопустимые символы. Допустимо только латинский алфавит и цифры');
             }
+        }
+
+        //----
+
+        if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            array_push($message, 'Некорректный email адресс');
+        }
+
+        $user = $this->database->query('SELECT email FROM Users WHERE email = :email', ['email' => $email])->fetch(\PDO::FETCH_ASSOC);
+
+        if(isset($user) && !empty($user)) {
+            array_push($message,'Данный email уже используется');
         }
 
         //----
