@@ -14,7 +14,7 @@ class Account_Controller extends Controller
 
     public function index_Action($args)
     {
-        $this->view->render('Index page');
+        View::redirect('/login');
     }
 
     public function logout_Action() {
