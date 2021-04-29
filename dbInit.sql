@@ -1,4 +1,4 @@
-//Hand only use
+//Hand use only
 
 CREATE TABLE IF NOT EXISTS Users (
                                      `id` int NOT NULL AUTO_INCREMENT,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS Users (
                                      `permissionLevel` TINYINT DEFAULT 0,
                                      `registerDate` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
                                      PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8 COLLATE utf8_bin AUTO_INCREMENT=0
+) DEFAULT CHARSET=utf8
 
 CREATE TABLE IF NOT EXISTS BlogList (
                                         `blogid` int NOT NULL AUTO_INCREMENT,
@@ -18,12 +18,18 @@ CREATE TABLE IF NOT EXISTS BlogList (
                                         `description` varchar(1200) NOT NULL,
                                         `region` varchar(16) NOT NULL,
                                         `createDate` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
-                                        PRIMARY KEY (`blogid`)
-) DEFAULT CHARSET=utf8 COLLATE utf8_bin AUTO_INCREMENT=0
+                                        PRIMARY KEY (`blogid`),
+                                        UNIQUE (`blogid`, `title`),
+
+                                        CONSTRAINT user_fk FOREIGN KEY (`userid`)
+                                        REFERENCES Users (`id`) ON DELETE CASCADE
+) DEFAULT CHARSET=utf8
 
 CREATE TABLE IF NOT EXISTS BlogRecords (
                                            `blogid` int NOT NULL,
                                            `title` varchar(180) NOT NULL,
                                            `text` varchar(5000) NOT NULL,
-                                           `createDate` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP)
-) DEFAULT CHARSET=utf8 COLLATE utf8_bin
+                                           `createDate` TIMESTAMP DEFAULT (CURRENT_TIMESTAMP),
+                                           CONSTRAINT blog_fk FOREIGN KEY (`blogid`)
+                                           REFERENCES BlogList (`blogid`) ON DELETE CASCADE
+) DEFAULT CHARSET=utf8
