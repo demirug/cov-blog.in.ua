@@ -13,11 +13,11 @@ class View
         $this->route = $route;
     }
 
-    public function render($title, $params = [], $js = []) {
+    public function render($title, $params = [], $js = [], $css = []) {
         $this->renderPath($this->route['action'], $title, $params, $js);
     }
 
-    public function renderPath($path, $title, $params = [], $js = []) {
+    public function renderPath($path, $title, $params = [], $js = [], $css = []) {
 
         extract($params);
 

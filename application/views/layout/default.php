@@ -7,6 +7,10 @@
 
     <link rel="stylesheet" href="/public/styles/style.css">
 
+    <?php foreach($css as $path): ?>
+        <link rel="stylesheet" href=<?php echo $path; ?>>
+    <?php endforeach; ?>
+
     <script type="text/javascript" src="/public/js/jquery-3.6.0.js"></script>
     <script type="text/javascript" src="/public/js/modalMessage.js"></script>
 
