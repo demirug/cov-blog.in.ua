@@ -25,14 +25,15 @@ class Blog_Controller extends Controller
      * cov-blog.in.ua/add/{blogName}
     */
 
-    public function onInitialize() {}
+    public function onInitialize() {
+        $this->view->layout = "blog";
+    }
 
     public function index_Action($args) {
         View::redirect('/');
     }
 
     public function blogs_Action($args) {
-
         $argsLength = count($args); //Getting count of arguments
 
         if($argsLength == 0) { //Return to main page if arguments not getted
@@ -41,7 +42,7 @@ class Blog_Controller extends Controller
 
             //Getting current page number and the number of blogs that can be displayed on page
             $blogConfig = require 'application/config/blog.php';
-            $blogsPerPage = $blogConfig['blog-list']['blogs-rows'] * $blogConfig['blog-list']['blogs-columns'];
+            $blogsPerPage = $blogConfig['blog-list'];
             $pageNumber = 1;
 
             if($argsLength > 1 && is_numeric($args[1]) && $args[1] >= 1) {
@@ -52,14 +53,20 @@ class Blog_Controller extends Controller
             if($this->model->hasRegion($args[0])) { //If first arguments is region
 
                 $result = $this->model->getBlogsByRegion($args[0], $pageNumber, $blogsPerPage); //Getting all blogs by region
-                echo "Блоги пользователей по области: $args[0] | Страница: $pageNumber <hr>";
 
-                foreach ($result as $value) {
-                    echo 'Author: ' . $value['username'] . ' | ' .$value['title'] . ' | ' . $value['description'] . ' | Created: ' . $value['createDate'] . '<br>';
-                    echo "<span>To read blog <a href='/view/" . $value['username'] . '/' . str_replace(' ', '-', $value['title']) . "'>click here</a></span><br><hr>";
+                // If count of blogs == 0 show 404
+                // but if it's first page (blogs at that region not exists at all)
+                // dont show 404 page
+                if(count($result) == 0 && $pageNumber != 1) {
+                    View::error(404);
                 }
 
+                //echo "Блоги пользователей по области: $args[0] | Страница: $pageNumber <hr>";
+
+                $this->view->render("Test title", ['blogs' => $result, 'isRegion' => true]);
+
                 $pagination = new Pagination($this->model->getBlogsCountByRegion($args[0]), $blogsPerPage);
+
                 $pagination->setRedirectURL('/blogs/'.$args[0]);
                 $pagination->setPageNumber($pageNumber);
                 $pagination->renderPagination();
@@ -67,16 +74,14 @@ class Blog_Controller extends Controller
             } else {
 
                 $result = $this->model->getBlogsByUser($args[0], $pageNumber, $blogsPerPage);
-                if(isset($result)) { //Check if first argument is username
+                if(isset($result)) { //Check if first argument is valid user
 
-                    echo "Блоги пользователя: $args[0] | Страница: $pageNumber <hr>";
+                    //echo "Блоги пользователя: $args[0] | Страница: $pageNumber <hr>";
 
-                    foreach ($result as $value) {
-                        echo  $value['title'] . ' | ' . $value['description'] . ' | Created: ' . $value['createDate'] . '<br>';
-                        echo "<span>To read blog <a href='/view/$args[0]/" . str_replace(' ', '-', $value['title']) . "'>click here</a></span><br><hr>";
-                    }
+                    $this->view->render("Test title", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false]);
 
                     $pagination = new Pagination($this->model->getBlogsCountByUser($args[0]), $blogsPerPage);
+
                     $pagination->setRedirectURL('/blogs/'.$args[0]);
                     $pagination->setPageNumber($pageNumber);
                     $pagination->renderPagination();
