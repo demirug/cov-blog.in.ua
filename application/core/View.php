@@ -14,7 +14,7 @@ class View
     }
 
     public function render($title, $params = [], $js = [], $css = []) {
-        $this->renderPath($this->route['action'], $title, $params, $js);
+        $this->renderPath($this->route['action'], $title, $params, $js, $css);
     }
 
     public function renderPath($path, $title, $params = [], $js = [], $css = []) {
