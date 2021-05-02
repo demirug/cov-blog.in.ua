@@ -24,6 +24,9 @@
 
 <?php else:?>
 
+    <center><h2>Blogs of user <?php echo $userName; ?></h2></center>
+    <br>
+
     <div class="wraper">
 
         <?php for($i = 0; $i < count($blogs); $i++): ?>
