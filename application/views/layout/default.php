@@ -5,7 +5,7 @@
 
     <title> <?php echo $title; ?> </title>
 
-    <link rel="stylesheet" href="/public/styles/style.css">
+    <link rel="stylesheet" href="/public/styles/modal.css">
 
     <?php foreach($css as $path): ?>
         <link rel="stylesheet" href=<?php echo $path; ?>>
