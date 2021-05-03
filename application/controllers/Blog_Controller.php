@@ -185,6 +185,14 @@ class Blog_Controller extends Controller
 
         if(!empty($_POST)) {
 
+            if (!preg_match("/[A-Za-zА-Яа-я0-9 ]/", $_POST['title'])) {
+                View::sendMessage("Error", "Form contains incorrect symbols", 3);
+            }
+
+            if(strlen($_POST['title']) < 5) {
+                View::sendMessage("Error", "Too short title. At least 5 symbols required");
+            }
+
             //If blog with that name already exists... send Error message
             if($this->model->getBlogIDByName($_SESSION['userID'], str_replace("-", " ", $_POST['title'])) !== -1) {
                 View::sendMessage("Error", "Blog with that name already exists", 3);
@@ -194,7 +202,7 @@ class Blog_Controller extends Controller
             View::sendMessage("Success", "Blog created", 1, 1000, ('/view/' . $_SESSION['userName'] .'/'. str_replace(" ", "-", $_POST['title'])));
         }
 
-        $this->view->render("Create blog", [], ['/public/js/formHandler.js']);
+        $this->view->render("Create blog", [], ['/public/js/formHandler.js', '/public/js/patternHandler.js']);
 
     }
 
