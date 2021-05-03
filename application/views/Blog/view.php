@@ -29,8 +29,8 @@
             </div>
             <p><?php echo $value['text'] ?></p>
             <footer>
-                <a href="#">Edit</a>
-                <p><?php echo $value['createDate'] ?></p>
+                <div><a href="#">Edit</a></div>
+                <div style="float: right"><?php echo $value['createDate'] ?><div>
             </footer>
         </article>
 

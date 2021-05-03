@@ -4,7 +4,6 @@ body{
     background-attachment: fixed;
     margin:0;
 }
-
 #cover {
     display: flex;
     height: 45vh;
@@ -107,13 +106,13 @@ article {
 #by{
     display:flex;
     align-items:center;
-    margin-bottom:25px
+    margin-bottom:15px
 }
 #by img{
     width:40px;
     border-radius:50%;
 }
-#by i, #by a{
+#by p, #by a{
     display:inline-block;
     padding-left:10px;
     color:#999;
@@ -133,13 +132,12 @@ article footer{
     font-size: 0.8em
 }
 
-article footer a{
-    background:#667;
-    padding:5px 10px;
-    border-radius:5px;
-    color:#ddd;
-    text-decoration:none;
-    margin-right:5px
+article footer a {
+    background: #667;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #ddd;
+    text-decoration: none;
+    margin-right: 5px;
+    float: left
 }
-
-
