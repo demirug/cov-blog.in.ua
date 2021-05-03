@@ -25,9 +25,7 @@ class Blog_Controller extends Controller
      * cov-blog.in.ua/add/{blogName}
     */
 
-    public function onInitialize() {
-        $this->view->layout = "blog";
-    }
+    public function onInitialize() {}
 
     public function index_Action($args) {
         View::redirect('/');
@@ -63,7 +61,7 @@ class Blog_Controller extends Controller
 
                 //echo "Блоги пользователей по области: $args[0] | Страница: $pageNumber <hr>";
 
-                $this->view->render("Test title", ['blogs' => $result, 'isRegion' => true]);
+                $this->view->render("Blogs of " . $args[0] . " region", ['blogs' => $result, 'isRegion' => true], [], ["/public/styles/Blog/blog.css"]);
 
                 $pagination = new Pagination($this->model->getBlogsCountByRegion($args[0]), $blogsPerPage);
 
@@ -78,7 +76,7 @@ class Blog_Controller extends Controller
 
                     //echo "Блоги пользователя: $args[0] | Страница: $pageNumber <hr>";
 
-                    $this->view->render("Test title", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false]);
+                    $this->view->render(ucfirst($args[0]) . "'s blogs", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false], [], ["/public/styles/Blog/blog.css"]);
 
                     $pagination = new Pagination($this->model->getBlogsCountByUser($args[0]), $blogsPerPage);
 
@@ -93,47 +91,60 @@ class Blog_Controller extends Controller
         }
     }
 
-    public function view_Action($args) {
+    public function view_Action($args)
+    {
 
         $argsLength = count($args);
 
-        if($argsLength == 0) {
+        if ($argsLength == 0) {
             View::redirect('/');
         }
 
-        if($argsLength == 1) { //If blog name not setted redirect to all user blogs
+        if ($argsLength == 1) {
+
             View::redirect('/blogs/' . $args[0]);
         }
 
         $userID = $this->model->getUserID($args[0]);
 
-        if($userID === -1) {
+        if ($userID === -1) {
             View::error(404);
         }
 
         $blogID = $this->model->getBlogIDByName($userID, str_replace('-', ' ', $args[1]));
-        if($blogID === -1) {
+
+        if ($blogID === -1) {
             View::redirect('/blogs/' . $args[0]);
         }
 
-        $result = $this->model->getPostsByUser($blogID, 1, 5);
+        $blogConfig = require 'application/config/blog.php';
+        $blogsPerPage = $blogConfig['blog-view'];
+        $pageNumber = 1;
 
-        echo "<center><h1>" . str_replace('-', ' ', $args[1]) ."</h1></center>";
-
-        if(count($result) == 0) {
-         echo '<hr><center>Blog is empty!<br>Soon here will be text :D</center>';
-        } else {
-
-            foreach ($result as $value) {
-                echo "<hr><h3>" . $value['title'] . "</h3>" . "<span>" . $value['text'] . "</span><br>" . $value['createDate'] . "<hr>";
-            }
+        if($argsLength > 2 && is_numeric($args[2]) && $args[2] >= 1) {
+            $pageNumber = $args[2];
         }
 
-        //If current user is blog author.. Adding button for creation new record to current blog
-        if(isset($_SESSION['userID']) && $_SESSION['userID'] === $userID) {
-            echo "<center><input type='button' onclick=\"location.href='/add/$args[1]';\" value='Add record'></center>";
-            echo "<center><input type='button' onclick=\"location.href='/edit/$args[1]';\" value='Edit blog settings'></center>";
+        $result = $this->model->getPostsByUser($blogID, $pageNumber, $blogsPerPage);
+
+        $description = "";
+
+        if($pageNumber == 1) {
+            $description = $this->model->getBlogDescription($blogID);
         }
+
+        if(count($result) === 0 && $pageNumber !== 1) {
+            View::error(404);
+        }
+
+        $this->view->render(("View blog of " . $args[1]), ["description" => $description, "blogid" => $blogID, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])], [], ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]);
+
+        $pagination = new Pagination($this->model->getRecordsCount($blogID), $blogsPerPage);
+
+        $pagination->setRedirectURL("/view/" . $args[0]. "/" . $args[1]);
+        $pagination->setPageNumber($pageNumber);
+        $pagination->renderPagination();
+
     }
 
     public function add_Action($args) {
