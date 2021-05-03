@@ -1,6 +1,3 @@
-@import url("../modal.css");
-@import url("../pagination.css");
-
 body{
     background-image: url("/public/images/blog/blogBackground.png");
     background-size: cover;
