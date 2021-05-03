@@ -7,6 +7,7 @@
 
     <title> <?php echo $title; ?> </title>
 
+    <link rel="stylesheet" href="/public/styles/modal.css">
     <link rel="stylesheet" href="/public/styles/account.css">
 
     <script type="text/javascript" src="/public/js/jquery-3.6.0.js"></script>
