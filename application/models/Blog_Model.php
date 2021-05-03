@@ -53,6 +53,11 @@ class Blog_Model extends Model
         return $statement->fetch()['count'];
     }
 
+    public function getRecordsCount($blogID) {
+        $statement = $this->database->query("SELECT COUNT(*) as count FROM `BlogRecords` WHERE blogID = '$blogID'");
+        return $statement->fetch()['count'];
+    }
+
     public function getBlogIDByName($userID, $blogName) {
         $statement = $this->database->query("SELECT blogid FROM BlogList WHERE userid = '$userID' and title = '$blogName'");
         $result = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -65,13 +70,18 @@ class Blog_Model extends Model
     }
 
     public function getPostsByUser($blogID, $pageNumber, $blogsPerPage) {
-        $statement = $this->database->query("SELECT * FROM BlogRecords WHERE blogid = $blogID ORDER BY createDate");
+        $statement = $this->database->query("SELECT * FROM BlogRecords WHERE blogid = $blogID ORDER BY createDate LIMIT $blogsPerPage OFFSET " . ($pageNumber - 1) * $blogsPerPage);
         return  $statement->fetchAll();
+    }
+
+    public function getBlogDescription($blogID) {
+        $statement = $this->database->query("SELECT description FROM BlogList WHERE blogid = '$blogID'");
+        return $statement->fetch(\PDO::FETCH_ASSOC)["description"];
     }
 
     public function getBlogsByRegion($regName, $pageNumber, $blogsPerPage) {
 
-        $statement = $this->database->query("SELECT login as username, title, description, createDate, region FROM BlogList JOIN Users ON userID = id WHERE region = '$regName' LIMIT  $blogsPerPage OFFSET " . ($pageNumber - 1) * $blogsPerPage);
+        $statement = $this->database->query("SELECT login as username, blogid, title, description, createDate, region FROM BlogList JOIN Users ON userID = id WHERE region = '$regName' LIMIT  $blogsPerPage OFFSET " . ($pageNumber - 1) * $blogsPerPage);
         return $statement->fetchAll();
     }
 
