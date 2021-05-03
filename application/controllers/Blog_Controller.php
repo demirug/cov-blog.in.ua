@@ -61,7 +61,7 @@ class Blog_Controller extends Controller
 
                 //echo "Блоги пользователей по области: $args[0] | Страница: $pageNumber <hr>";
 
-                $this->view->render("Blogs of " . $args[0] . " region", ['blogs' => $result, 'isRegion' => true], [], ["/public/styles/Blog/blog.css"]);
+                $this->view->render("Blogs of " . $args[0] . " region", ['blogs' => $result, 'isRegion' => true], [], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
 
                 $pagination = new Pagination($this->model->getBlogsCountByRegion($args[0]), $blogsPerPage);
 
@@ -76,7 +76,7 @@ class Blog_Controller extends Controller
 
                     //echo "Блоги пользователя: $args[0] | Страница: $pageNumber <hr>";
 
-                    $this->view->render(ucfirst($args[0]) . "'s blogs", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false], [], ["/public/styles/Blog/blog.css"]);
+                    $this->view->render(ucfirst($args[0]) . "'s blogs", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false], [], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
 
                     $pagination = new Pagination($this->model->getBlogsCountByUser($args[0]), $blogsPerPage);
 
