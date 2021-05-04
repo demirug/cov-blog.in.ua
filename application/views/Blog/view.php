@@ -22,14 +22,19 @@
 
     <?php foreach ($results as $value): ?>
 
-        <article>
+        <article recordID = "<?php echo $value['recordid'] ?>">
             <div id="by">
                 <img src="https://res.cloudinary.com/doytulo2j/image/upload/v1613146655/harry/harry_o2yl9j.jpg" alt="">
                 <p><?php echo $value['title'] ?></p>
             </div>
-            <p><?php echo $value['text'] ?></p>
+            <div class="content">
+                <?php echo $value['text'] ?>
+            </div>
+
             <footer>
-                <div><a href="#">Edit</a></div>
+                <?php if ($canEdit):?>
+                <button>Edit</button>
+                <?php endif; ?>
                 <div style="float: right"><?php echo $value['createDate'] ?><div>
             </footer>
         </article>
