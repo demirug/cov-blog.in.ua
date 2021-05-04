@@ -42,11 +42,15 @@ class View
 
     // formHandler.js has handler for this json messages. Used with AJAX
     public static function location($url) {
-        exit(json_encode(['url' => $url]));
+        self::sendJson(['url' => $url]);
     }
 
     public static function sendMessage($title, $message, $code = 1, $closeModalTimerMS = -1, $redirectOnClose = null) {
-        exit(json_encode(['title' => $title, 'message' => $message, 'code' => $code, 'modalTimer' => $closeModalTimerMS, 'redirect' => $redirectOnClose]));
+        self::sendJson(['title' => $title, 'message' => $message, 'code' => $code, 'modalTimer' => $closeModalTimerMS, 'redirect' => $redirectOnClose]);
+    }
+
+    public static function sendJson($jsonMessage = []) {
+        exit(json_encode($jsonMessage));
     }
 
 }
