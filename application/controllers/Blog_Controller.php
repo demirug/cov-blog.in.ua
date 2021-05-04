@@ -137,7 +137,17 @@ class Blog_Controller extends Controller
             View::error(404);
         }
 
-        $this->view->render(("View blog of " . $args[1]), ["description" => $description, "blogid" => $blogID, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])], [], ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]);
+        $canEdit = false;
+
+        if(isset($_SESSION['userID']) && $this->model->hasAccessToBlog($_SESSION['userID'], $blogID)) {
+            $canEdit = true;
+        }
+
+        $this->view->render(("View blog of " . $args[1]),
+            ["description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
+            ["/public/js/ckeditor/ckeditor.js", "/public/js/editButton.js"],
+            ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]
+        );
 
         $pagination = new Pagination($this->model->getRecordsCount($blogID), $blogsPerPage);
 
@@ -147,6 +157,7 @@ class Blog_Controller extends Controller
 
     }
 
+    // /add/{blogName}
     public function add_Action($args) {
 
         if(!isset($_SESSION['userID'])) {
@@ -206,33 +217,44 @@ class Blog_Controller extends Controller
 
     }
 
+    // edit/{recordID}
     public function edit_Action($args) {
+
+        if(empty($_POST)) {
+            View::redirect("/");
+        }
 
         $argsLength = count($args);
 
         if($argsLength == 0) {
-            View::redirect('/');
+            View::sendMessage("Error", ["Not enough arguments", "Please contact site administrator"], 3);
         }
 
         if(!isset($_SESSION['userID'])) {
-            View::error(403);
+            View::sendMessage("Error", "You not authorized to do that", 3);
         }
 
-        $blogID = $this->model->getBlogIDByName($_SESSION['userID'],  str_replace("-", " ", $args[0]));
+        if(!is_numeric($args[0]) || $args[0] < 0) {
+            View::sendMessage("Error", "Value must be numeric and bigger than 0", 3);
+        }
+
+        $blogID = $this->model->getBlogIDByRecord($args[0]);
 
         if($blogID === -1) {
-            View::error(403);
+            View::sendMessage("Error", "Incorrect record id", 3);
         }
 
-        $blog = $this->model->getBlogByID($blogID);
 
-        if(!empty($_POST)) {
-            $this->model->database->query("UPDATE BlogList SET title = :title, description = :description, region = :region WHERE blogid = :blogid", ["title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region'], "blogid" => $blogID]);
-            View::sendMessage("Success", "Blog configuration updated", 1, 1000, ('/view/' . $_SESSION['userName'] .'/'. str_replace(" ", "-", $_POST['title'])));
+        if(!$this->model->hasAccessToBlog($_SESSION['userID'], $blogID)) {
+           View::sendMessage("Error", "You haven't enough permissions to edit this blog", 3);
         }
 
-        $this->view->render("Edit blog", ["blogName"=> $blog['title'], "blogDescription"=> $blog['description'], "blogRegion" => $blog['region']], ['/public/js/formHandler.js']);
+        $title = $_POST['title'];
+        $text = $_POST['text'];
 
+        $this->model->database->query("UPDATE BlogRecords SET title = :title, text = :text WHERE blogid = :blogid AND recordid = :recordid", ["title" => $title, "text" => $text, "blogid" => $blogID, "recordid" => $args[0]]);
+
+        View::sendJson(["status" => "OK"]);
     }
 
 
