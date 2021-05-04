@@ -26,10 +26,13 @@ CREATE TABLE IF NOT EXISTS BlogList (
 ) DEFAULT CHARSET=utf8
 
 CREATE TABLE IF NOT EXISTS BlogRecords (
+                                           `recordid` int NOT NULL AUTO_INCREMENT,
                                            `blogid` int NOT NULL,
                                            `title` varchar(180) NOT NULL,
                                            `text` varchar(5000) NOT NULL,
                                            `createDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                           PRIMARY KEY (`recordid`),
+
                                            CONSTRAINT blog_fk FOREIGN KEY (`blogid`)
                                            REFERENCES BlogList (`blogid`) ON DELETE CASCADE
 ) DEFAULT CHARSET=utf8
