@@ -91,6 +91,17 @@ class Blog_Model extends Model
         return $statement->fetch()['count'];
     }
 
+    public function getBlogIDByRecord($recordID) {
+        $statement = $this->database->query("SELECT BlogList.blogid FROM BlogRecords JOIN BlogList ON BlogRecords.blogid = BlogList.blogid WHERE recordid = " . $recordID);
+        $result = $statement->fetch(\PDO::FETCH_ASSOC);
+        return ($result ? $result['blogid'] : -1);
+    }
+
+    public function hasAccessToBlog($userID, $blogID) {
+        $statement = $this->database->query("SELECT blogid FROM BlogList WHERE userid = $userID AND blogid = $blogID");
+        return (count($statement->fetchAll()) != 0);
+    }
+
     public function onInitialize() {}
 
     public function requireDataBase()
