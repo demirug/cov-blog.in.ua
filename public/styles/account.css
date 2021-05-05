@@ -70,7 +70,16 @@ a:hover{
     margin: 5px;
 }
 .login-form .group .button{
-    background:#11cfee;
+    background:#23c0da;
+    cursor: pointer;
+    background-image: linear-gradient(45deg, #397d8e 50%, transparent 50%);
+    background-position: 100%;
+    background-size: 400%;
+    transition: background 300ms ease-in-out;
+}
+.login-form .group .button:hover{
+    outline: 0;
+    background-position: 0;
 }
 .hr{
     height:2px;
