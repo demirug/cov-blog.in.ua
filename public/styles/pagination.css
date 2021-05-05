@@ -1,4 +1,4 @@
-a {
+.pagination a {
     text-decoration: none;
     color: black;
     background-color: white;
@@ -7,17 +7,22 @@ a {
     padding: 3px 5px 3px 5px;
 }
 
-a.selected {
+.pagination a.selected {
     background-color: cyan;
 }
 
-a.control {
+.pagination a.control {
     padding-left: 10px;
     padding-right: 10px;
     margin-left: 10px;
     margin-right: 10px;
 }
 
-a:hover:not(.selected) {
+.pagination a.control.lock {
+  background-color: #8a8a8a;
+  cursor: pointer;
+}
+
+.pagination a:hover:not(.selected):not(.lock) {
     background-color: red;
 }
