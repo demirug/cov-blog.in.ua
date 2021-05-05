@@ -33,7 +33,7 @@
 
             <footer>
                 <?php if ($canEdit):?>
-                <button>Edit</button>
+                    <div><button> Edit</button></div>
                 <?php endif; ?>
                 <div style="float: right"><?php echo $value['createDate'] ?><div>
             </footer>
