@@ -42,5 +42,7 @@
     <?php endforeach; ?>
 
     <?php endif; ?>
-
+    <div class="circle">
+        <span class="addText" align="center">+</span>
+    </div>
 </div>

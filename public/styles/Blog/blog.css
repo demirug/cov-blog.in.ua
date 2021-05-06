@@ -3,10 +3,8 @@ body{
     background-size: cover;
     background-attachment: fixed;
     margin:0;
-
-    color:#a6c9de;
+    color:#00bcd4;
     width:100%;
-    font:100 16px/18px 'Open Sans',sans-serif;
 }
 *,:after,:before{
     box-sizing:border-box
@@ -68,13 +66,6 @@ body{
     width: 100%;
     font-size: .9rem;
 }
-.blog-card .details a {
-    -webkit-text-decoration: dotted underline;
-    text-decoration: dotted underline;
-}
-.blog-card .details ul li {
-    display: inline-block;
-}
 .blog-card .description {
     padding: 1rem;
     background: #fff;
@@ -101,7 +92,6 @@ body{
     display: inline-block;
     position: relative;
 }
-
 .blog-card p {
     position: relative;
     margin: 1rem 0 0;
@@ -134,7 +124,6 @@ body{
         flex-basis: 60%;
     }
     .blog-card .description:before {
-        -webkit-transform: skewX(-3deg);
         transform: skewX(-3deg);
         content: "";
         background: #ffffff;
@@ -151,7 +140,31 @@ body{
     .blog-card.alt .description:before {
         left: inherit;
         right: -10px;
-        -webkit-transform: skew(3deg);
         transform: skew(3deg);
     }
+}
+.circle {
+    position: fixed;
+    padding: 4px 46px 3px 18px;
+    color: #FFF;
+    width: 46px;
+    border-radius: 50px;
+    background-color: #607d8b;
+    transition: all .3s ease-in-out;
+    right: 30px;
+    top: auto;
+    bottom: 60px;
+    cursor: pointer;
+    z-index: 2;
+}
+.circle:hover {
+    box-shadow: 0px 10px 8px 0px rgba(29,209,239,0.4);
+    background-color: #00bcd4;
+}
+
+.addText {
+    font-size: 50px;
+    font-weight: 500;
+    overflow: hidden;
+    width: 100%;
 }

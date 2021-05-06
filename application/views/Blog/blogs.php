@@ -1,5 +1,7 @@
 <?php if($isRegion === true): ?>
-
+    <div class="circle">
+        <span class="addText" align="center">+</span>
+    </div>
         <div class="wraper">
 
         <?php for($i = 0; $i < count($blogs); $i++): ?>
@@ -47,6 +49,7 @@
                 </div>
             </div>
         <?php  endfor; ?>
+
     </div>
 
 <?php endif;?>

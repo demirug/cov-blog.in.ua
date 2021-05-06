@@ -1,7 +1,7 @@
 .modal {
     display: none; /* Hidden by default none/block */
     position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    z-index: 3; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -36,7 +36,7 @@
 
 .but {
     box-sizing: border-box;
-    background-color: transparent;
+    background-color: #feffff;
     border: 2px solid #01d8ff;
     border-radius: 0.6em;
     cursor: pointer;
@@ -49,16 +49,11 @@
     text-align: center;
     text-transform: uppercase;
     color: #000;
-    background-image: linear-gradient(45deg, #01d8ff 50%, transparent 50%);
-    background-position: 100%;
-    background-size: 400%;
     transition: background 300ms ease-in-out;
-    outline:none;
 }
 .but:hover {
+    background-color:#01d8ff ;
     color: #fff;
-    outline: 0;
-    background-position: 0;
 }
 
 .modal-header {

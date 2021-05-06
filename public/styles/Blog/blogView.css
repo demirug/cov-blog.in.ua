@@ -164,3 +164,26 @@ img{
     max-width: 100%;
     height: auto;
 }
+.circle {
+    position: fixed;
+    padding: 3px 1px 3px 18px;
+    color: #FFF;
+    width: 46px;
+    border-radius: 50px;
+    background-color: #607d8b;
+    transition: all .3s ease-in-out;
+    right: 30px;
+    top: auto;
+    bottom: 60px;
+    cursor: pointer;
+}
+.circle:hover {
+    box-shadow: 0px 10px 8px 0px rgba(29,209,239,0.4);
+    background-color: #00bcd4;
+}
+.addText {
+    font-size: 50px;
+    font-weight: 500;
+    overflow: hidden;
+    width: 100%;
+}
