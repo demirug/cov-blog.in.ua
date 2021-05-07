@@ -42,5 +42,5 @@
     <?php endforeach; ?>
 
     <?php endif; ?>
-    <button class="circle">+</button>
+    <button class="circle">+<span>create new blog</span></button>
 </div>
