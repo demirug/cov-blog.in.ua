@@ -145,7 +145,7 @@ class Blog_Controller extends Controller
 
         $this->view->render(("View blog of " . $args[1]),
             ["description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
-            ["/public/js/ckeditor/ckeditor.js", "/public/js/editButton.js"],
+            ["/public/js/ckeditor/ckeditor.js", "/public/js/editButton.js", "/public/js/addButton.js"],
             ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]
         );
 
@@ -160,18 +160,23 @@ class Blog_Controller extends Controller
     // /add/{blogName}
     public function add_Action($args) {
 
+
+        if(empty($_POST)) {
+            View::redirect('/');
+        }
+
         if(!isset($_SESSION['userID'])) {
-            View::error(403);
+            View::sendMessage("Error", "You must be authorize to do that", 3);
         }
 
         if(count($args) == 0) {
-            View::redirect('/');
+            View::sendMessage("Error", ["Arguments not found", "Please contact administrator"], 3);
         }
 
         $blogID = $this->model->getBlogIDByName($_SESSION['userID'], str_replace("-", " ", $args[0]));
 
         if($blogID === -1) {
-            View::error(403);
+            View::sendMessage("Error", ["Blog with that name not found", "If it system error please contact administrator"], 3, -1, '/');
         }
 
         if(!empty($_POST)) {
@@ -181,10 +186,11 @@ class Blog_Controller extends Controller
             }
 
             $this->model->database->query("INSERT INTO `BlogRecords` (`blogid`, `title`, `text`) values ($blogID, :title, :text)", ["title" => $_POST['title'], "text" => $_POST['text']]);
-            View::sendMessage("Success", "Record to blog added", 1, 1000, ('/view/'.$_SESSION['userName'].'/'. $args[0]));
-        }
 
-        $this->view->render("Add record", ["blogName" => str_replace("-", " ", $args[0])], ['/public/js/formHandler.js']);
+            $blogConfig = require 'application/config/blog.php';
+            $pagination = new Pagination($this->model->getRecordsCount($blogID), $blogConfig['blog-view']);
+            View::sendMessage("Success", "Record to blog added", 1, 1000, ('/view/'.$_SESSION['userName'].'/'. $args[0] . '/' . $pagination->getPageCount()));
+        }
     }
 
 
@@ -255,6 +261,17 @@ class Blog_Controller extends Controller
         $this->model->database->query("UPDATE BlogRecords SET title = :title, text = :text WHERE blogid = :blogid AND recordid = :recordid", ["title" => $title, "text" => $text, "blogid" => $blogID, "recordid" => $args[0]]);
 
         View::sendJson(["status" => "OK"]);
+    }
+
+    // /settings/{blogid}
+    public function settings_Action($args) {
+        $argsLength = count($args);
+
+
+        $this->view->render('Settings blog',
+            ["blogName" => "test", "blogRegion" => "kiev", "blogDescription" => "test description"],
+            ["/public/js/formHandler.js"]);
+
     }
 
 
