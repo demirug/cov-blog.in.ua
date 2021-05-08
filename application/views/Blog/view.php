@@ -33,7 +33,7 @@
 
             <footer>
                 <?php if ($canEdit):?>
-                    <div><button> Edit</button></div>
+                    <button>Edit</button>
                 <?php endif; ?>
                 <div style="float: right"><?php echo $value['createDate'] ?><div>
             </footer>
@@ -42,5 +42,8 @@
     <?php endforeach; ?>
 
     <?php endif; ?>
-    <button class="circle">+<span>create new blog</span></button>
+
+    <?php if ($canEdit):?>
+        <button class="circle">+<span>Add blog record</span></button>
+    <?php endif; ?>
 </div>
