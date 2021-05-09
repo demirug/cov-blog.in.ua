@@ -61,7 +61,7 @@ class Blog_Controller extends Controller
 
                 //echo "Блоги пользователей по области: $args[0] | Страница: $pageNumber <hr>";
 
-                $this->view->render("Blogs of " . $args[0] . " region", ['blogs' => $result, 'isRegion' => true], [], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
+                $this->view->render("Blogs of " . $args[0] . " region", ['blogs' => $result, 'isRegion' => true], ["/public/js/addBlogButton.js"], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
 
                 $pagination = new Pagination($this->model->getBlogsCountByRegion($args[0]), $blogsPerPage);
 
@@ -76,7 +76,7 @@ class Blog_Controller extends Controller
 
                     //echo "Блоги пользователя: $args[0] | Страница: $pageNumber <hr>";
 
-                    $this->view->render(ucfirst($args[0]) . "'s blogs", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false], [], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
+                    $this->view->render(ucfirst($args[0]) . "'s blogs", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false], ["/public/js/addBlogButton"], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
 
                     $pagination = new Pagination($this->model->getBlogsCountByUser($args[0]), $blogsPerPage);
 
@@ -145,7 +145,7 @@ class Blog_Controller extends Controller
 
         $this->view->render(("View blog of " . $args[1]),
             ["description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
-            ["/public/js/ckeditor/ckeditor.js", "/public/js/editButton.js", "/public/js/addButton.js"],
+            ["/public/js/ckeditor/ckeditor.js", "/public/js/editRecordButton.js", "/public/js/addRecordButton.js"],
             ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]
         );
 
@@ -196,11 +196,21 @@ class Blog_Controller extends Controller
 
     public function create_Action($args) {
 
-        if(!isset($_SESSION['userID'])) {
-            View::error(403);
-        }
-
         if(!empty($_POST)) {
+
+            if(isset($_POST['buttonHandle'])) {
+
+                if(!isset($_SESSION['userID'])) {
+                    View::sendMessage("Error", "You must be authorize to create blog", 3, 3000, '/login');
+                } else View::location('/blog/create');
+
+                return;
+            }
+
+
+            if(!isset($_SESSION['userID'])) {
+                View::sendMessage("Error", "You must authorize to do that", 3, -1, '/login');
+            }
 
             if (!preg_match("/[A-Za-zА-Яа-я0-9 ]/", $_POST['title'])) {
                 View::sendMessage("Error", "Form contains incorrect symbols", 3);
@@ -217,6 +227,10 @@ class Blog_Controller extends Controller
 
             $this->model->database->query("INSERT INTO `BlogList` (`userid`, `title`, `description`, `region`) values (:user, :title, :description, :region)", ["user" => $_SESSION['userID'], "title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region']]);
             View::sendMessage("Success", "Blog created", 1, 1000, ('/view/' . $_SESSION['userName'] .'/'. str_replace(" ", "-", $_POST['title'])));
+        }
+
+        if(!isset($_SESSION['userID'])) {
+            View::error(403);
         }
 
         $this->view->render("Create blog", [], ['/public/js/formHandler.js', '/public/js/patternHandler.js']);
