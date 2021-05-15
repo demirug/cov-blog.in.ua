@@ -1,0 +1,155 @@
+body{
+    background-image: url("https://res.cloudinary.com/doytulo2j/image/upload/v1619438021/%D0%BA%D0%BE%D1%80%D0%BE%D0%BD%D0%B0/9_rlm2zo.png");
+    background-size: cover;
+    background-attachment: fixed;
+    margin:0;
+    font-family: 'Montserrat', Arial, sans-serif;
+}
+input, select, textarea {
+    font: inherit;
+}
+
+#container {
+    background-color: whitesmoke;
+    border: solid 3px #474544;
+    max-width: 768px;
+    margin: 60px auto;
+    position: relative;
+}
+
+form {
+    padding: 37.5px;
+    margin: 20px 0;
+    margin-bottom: 52px;
+}
+
+h1 {
+    color: #474544;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 7px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.underline {
+    border-bottom: solid 2px #059fa5;
+    margin: -0.512em auto;
+    width: 80px;
+}
+
+input[type='text'], select, textarea {
+    background: none;
+    border: none;
+    border-bottom: solid 2px #059fa5;
+    color: #474544;
+    letter-spacing: 1px;
+    margin: 0em 0 1.875em 0;
+    padding: 0 0 0.875em 0;
+    text-transform: uppercase;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+input[type='text']:focus, textarea:focus {
+    outline: none;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+.region {
+    width: 100%;
+}
+
+.title {
+    width: 100%;
+}
+
+textarea {
+    line-height: 150%;
+    height: 160px;
+    resize: none;
+    width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+    #container {
+        margin: 20px auto;
+        width: 95%;
+        height: 530px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 26px;
+    }
+
+    .underline {
+        width: 68px;
+    }
+
+    #form_button {
+        padding: 24px 16px;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    .underline {
+        width: 55px;
+    }
+}
+.right{
+    float: right;
+    font-size: 16px;
+}
+button {
+    border: 2px solid #059fa5;
+    border-radius: 0.6em;
+    cursor: pointer;
+    align-self: center;
+    line-height: 0;
+    padding: 1.5em 4.7em;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    color: #059fa5;
+    transition: background 300ms ease-in-out;
+    float: left;
+    font-size: 16px;
+}
+button:hover, button:focus {
+    color: #fff;
+    outline: 0;
+    background-position: 0;
+    background-color: #059fa5;
+}
+.btn {
+    color: white;
+    padding: 11px 13px;
+    font-size: 25px;
+    cursor: pointer;
+    border: 2px solid #059fa5;
+    border-radius: 0.4em;
+    cursor: pointer;
+    align-self: center;
+    line-height: 0;
+    text-decoration: none;
+    text-align: center;
+    text-transform: uppercase;
+    color: #059fa5;
+    transition: background 300ms ease-in-out;
+}
+button:hover, button:focus {
+    color: #fff;
+    outline: 0;
+    background-position: 0;
+    background-color: #059fa5;
+}
