@@ -238,7 +238,7 @@ class Blog_Controller extends Controller
                 View::sendMessage("Error", "Too short title. At least 5 symbols required");
             }
 
-            if(strlen($_POST['description'] > 180)) {
+            if(strlen($_POST['description']) > 180) {
                 View::sendMessage("Error", "Too big description. Max length -> 180 chars");
             }
 
@@ -255,7 +255,9 @@ class Blog_Controller extends Controller
             View::error(403);
         }
 
-        $this->view->render("Create blog", [], ['/public/js/formHandler.js', '/public/js/patternHandler.js']);
+        $this->view->render("Create blog", [],
+            ['/public/js/formHandler.js', '/public/js/patternHandler.js'],
+            ["/public/styles/Blog/create.css", "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"]);
 
     }
 
