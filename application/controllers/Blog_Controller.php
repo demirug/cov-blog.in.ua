@@ -61,7 +61,7 @@ class Blog_Controller extends Controller
 
                 //echo "Блоги пользователей по области: $args[0] | Страница: $pageNumber <hr>";
 
-                $this->view->render("Blogs of " . $args[0] . " region", ['blogs' => $result, 'isRegion' => true], ["/public/js/addBlogButton.js"], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
+                $this->view->render("Blogs of " . $args[0] . " region", ['blogs' => $result, 'isRegion' => true], ["/public/js/Blog/createBlogButton.js"], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
 
                 $pagination = new Pagination($this->model->getBlogsCountByRegion($args[0]), $blogsPerPage);
 
@@ -76,7 +76,7 @@ class Blog_Controller extends Controller
 
                     //echo "Блоги пользователя: $args[0] | Страница: $pageNumber <hr>";
 
-                    $this->view->render(ucfirst($args[0]) . "'s blogs", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false], ["/public/js/addBlogButton"], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
+                    $this->view->render(ucfirst($args[0]) . "'s blogs", ['blogs' => $result, 'userName' => $args[0], 'isRegion' => false], ["/public/js/Blog/addBlogButton"], ["/public/styles/pagination.css", "/public/styles/Blog/blog.css"]);
 
                     $pagination = new Pagination($this->model->getBlogsCountByUser($args[0]), $blogsPerPage);
 
@@ -145,7 +145,7 @@ class Blog_Controller extends Controller
 
         $this->view->render(("View blog of " . $args[1]),
             ["description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
-            ["/public/js/ckeditor/ckeditor.js", "/public/js/editRecordButton.js", "/public/js/addRecordButton.js"],
+            ["/public/js/ckeditor/ckeditor.js", "/public/js/Blog/editRecordButton.js", "/public/js/Blog/addRecordButton.js"],
             ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]
         );
 
@@ -159,7 +159,6 @@ class Blog_Controller extends Controller
 
     // /add/{blogName}
     public function add_Action($args) {
-
 
         if(empty($_POST)) {
             View::redirect('/');
@@ -181,8 +180,24 @@ class Blog_Controller extends Controller
 
         if(!empty($_POST)) {
 
-            if(!isset($_POST['text']) || strip_tags($_POST['text']) === '') { //If text of blog record is empty... send warning message
-                View::sendMessage("Info", "Blog record must contain text!", 2, 2500);
+            $errors = [];
+
+            if(!isset($_POST['title']) || strlen(str_replace(' ', '', $_POST['title'])) < 5) {
+                array_push($errors, "Too short title. Required at least 5 chars");
+            }
+            else if(strlen($_POST['title']) > 180) {
+                array_push($errors, "Too big title. Max 180 symbols");
+            }
+
+            //If count of chars (without space) less than 5 -> show error
+            if(!isset($_POST['text']) || strlen(str_replace(' ', '', strip_tags($_POST['text']))) < 5) {
+                array_push($errors, "Too short record. Required at least 5 chars");
+            } else if(strlen($_POST['text'] > 5000)) {
+                array_push($errors, "Too big record");
+            }
+
+            if(count($errors) > 0) {
+                View::sendMessage("Error", $errors, 3);
             }
 
             $this->model->database->query("INSERT INTO `BlogRecords` (`blogid`, `title`, `text`) values ($blogID, :title, :text)", ["title" => $_POST['title'], "text" => $_POST['text']]);
@@ -198,6 +213,9 @@ class Blog_Controller extends Controller
 
         if(!empty($_POST)) {
 
+            //If its click on button "CREATE BLOG"
+            //Redirect to login form if user not authorized
+            //Else redirect to create blog form
             if(isset($_POST['buttonHandle'])) {
 
                 if(!isset($_SESSION['userID'])) {
@@ -218,6 +236,10 @@ class Blog_Controller extends Controller
 
             if(strlen($_POST['title']) < 5) {
                 View::sendMessage("Error", "Too short title. At least 5 symbols required");
+            }
+
+            if(strlen($_POST['description'] > 180)) {
+                View::sendMessage("Error", "Too big description. Max length -> 180 chars");
             }
 
             //If blog with that name already exists... send Error message
@@ -269,8 +291,25 @@ class Blog_Controller extends Controller
            View::sendMessage("Error", "You haven't enough permissions to edit this blog", 3);
         }
 
-        $title = $_POST['title'];
-        $text = $_POST['text'];
+        $errors = [];
+
+        if(!isset($_POST['title']) || strlen(str_replace(' ', '', $_POST['title'])) < 5) {
+            array_push($errors, "Too short title. Required at least 5 chars");
+        }
+        else if(strlen($_POST['title']) > 180) {
+            array_push($errors, "Too big title. Max 180 symbols");
+        }
+
+        //If count of chars (without space) less than 5 -> show error
+        if(!isset($_POST['text']) || strlen(str_replace(' ', '', strip_tags($_POST['text']))) < 5) {
+            array_push($errors, "Too short record. Required at least 5 chars");
+        } else if(strlen($_POST['text'] > 5000)) {
+            array_push($errors, "Too big record");
+        }
+
+        if(count($errors) > 0) {
+            View::sendMessage("Error", $errors, 3);
+        }
 
         $this->model->database->query("UPDATE BlogRecords SET title = :title, text = :text WHERE blogid = :blogid AND recordid = :recordid", ["title" => $title, "text" => $text, "blogid" => $blogID, "recordid" => $args[0]]);
 
