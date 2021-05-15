@@ -26,7 +26,7 @@ $(document).ready(function() {
             var errors = [];
 
             if(title.replaceAll(' ', '').length < 5) {
-                errors.push("Too short title. Required at least 5 symbols")
+                errors.push("Too short title. Required at least 5 chars")
             }
 
             if(title.length > 180) {

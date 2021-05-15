@@ -36,6 +36,33 @@ $(document).ready(function() {
         $('form').submit(function (e) {
             e.preventDefault();
             CKEDITOR.instances['create_editor'].updateElement();
+
+            var title = $(this).children('input[type=text]').val();
+            var text = CKEDITOR.instances['create_editor'].getData();
+
+            var errors = [];
+
+            if(title.replaceAll(' ', '').length < 5) {
+                errors.push("Too short title. Required at least 5 chars");
+            }
+
+            if(title.length > 180) {
+                errors.push("Too big title. Max 180 symbols");
+            }
+
+            if(jQuery(text).text().replaceAll(' ', '').length < 5) {
+                errors.push("Too short record. Required at least 5 chars");
+            }
+
+            if(text > 5000) {
+                errors.push("Too big record");
+            }
+
+            if(errors.length > 0) {
+                showMessage('Error', errors, 3);
+                return;
+            }
+
             $.ajax({
                 type: 'post',
                 url: '/blog/add/' + window.location.pathname.split('/')[3],
