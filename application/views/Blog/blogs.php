@@ -1,5 +1,5 @@
 <?php if($isRegion === true): ?>
-    <button class="circle">+<span>add blog record</span></button>
+    <button class="circle">+<span>Add new blog</span></button>
         <div class="wraper">
 
         <?php for($i = 0; $i < count($blogs); $i++): ?>
