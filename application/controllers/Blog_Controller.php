@@ -313,7 +313,7 @@ class Blog_Controller extends Controller
             View::sendMessage("Error", $errors, 3);
         }
 
-        $this->model->database->query("UPDATE BlogRecords SET title = :title, text = :text WHERE blogid = :blogid AND recordid = :recordid", ["title" => $title, "text" => $text, "blogid" => $blogID, "recordid" => $args[0]]);
+        $this->model->database->query("UPDATE BlogRecords SET title = :title, text = :text WHERE blogid = :blogid AND recordid = :recordid", ["title" => $_POST['title'], "text" => $_POST['text'], "blogid" => $blogID, "recordid" => $args[0]]);
 
         View::sendJson(["status" => "OK"]);
     }
