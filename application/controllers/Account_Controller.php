@@ -8,9 +8,7 @@ use application\core\View;
 class Account_Controller extends Controller
 {
 
-    public function onInitialize() {
-        $this->view->layout = "account";
-    }
+    public function onInitialize() {}
 
     public function index_Action($args)
     {
@@ -45,7 +43,7 @@ class Account_Controller extends Controller
             return;
         }
 
-        $this->view->render('Login page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js']);
+        $this->view->render('Login page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/account.css"]);
     }
 
     public function register_Action() {
@@ -70,7 +68,7 @@ class Account_Controller extends Controller
             return;
         }
 
-        $this->view->render('Register page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js']);
+        $this->view->render('Register page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/account.css"]);
     }
 
 }
