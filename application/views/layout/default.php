@@ -42,9 +42,6 @@
 </div>
 <!-- Modal end -->
 
-<h1>Hello world it's default layout</h1>
-<hr>
-<br>
 
 <?php echo $content; ?>
 
