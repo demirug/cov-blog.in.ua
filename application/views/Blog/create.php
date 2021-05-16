@@ -1,7 +1,7 @@
 <div id="container">
     <h1> Create new blog</h1>
-    <div class="underline">
-    </div>
+    <div class="underline"></div>
+    <input id="file-input" type="file", name="file-input" accept=".png, .jpg, .jpeg" style="display: none">
     <form action="<?php echo $_SERVER['REQUEST_URI'];?>" method="post">
         <div class="telephone">
             <label for="name"></label>
@@ -26,3 +26,9 @@
         </div>
     </form><!-- // End form -->
 </div><!-- // End #container -->
+
+<script>
+    $('.btn').click(function () {
+        $('#file-input').trigger('click');
+    });
+</script>
