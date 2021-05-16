@@ -219,7 +219,7 @@ class Blog_Controller extends Controller
             if(isset($_POST['buttonHandle'])) {
 
                 if(!isset($_SESSION['userID'])) {
-                    View::sendMessage("Error", "You must be authorize to create blog", 3, 3000, '/login');
+                    View::sendMessage("Error", "You must be authorize to create blog", 2, 3000, '/login');
                 } else View::location('/blog/create');
 
                 return;
