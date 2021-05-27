@@ -248,6 +248,26 @@ class Blog_Controller extends Controller
             }
 
             $this->model->database->query("INSERT INTO `BlogList` (`userid`, `title`, `description`, `region`) values (:user, :title, :description, :region)", ["user" => $_SESSION['userID'], "title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region']]);
+
+
+            if(isset($_FILES['file-input'])) {
+
+                //If size of file large than 2MB
+                if($_FILES['file-input']['size'] > 2097152) {
+                    View::sendMessage("Warning", "Image size cant be bigger than 2mb", 3);
+                }
+
+                $extension = pathinfo($_FILES['file-input']['name'], PATHINFO_EXTENSION);
+
+                if($extension != "png" && $extension !== "jpg" && $extension !== "jpeg") {
+                    View::sendMessage("Warning", "Allowed formats only png and jpg", 3);
+                }
+
+                $blogID = $this->model->database->lastInsertId();
+
+                imagepng(imagecreatefromstring(file_get_contents($_FILES['file-input']['tmp_name'])), "public/images/userdata/blogs/" . $blogID . ".png");
+            }
+
             View::sendMessage("Success", "Blog created", 1, 1000, ('/view/' . $_SESSION['userName'] .'/'. str_replace(" ", "-", $_POST['title'])));
         }
 
