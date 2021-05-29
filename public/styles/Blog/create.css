@@ -7,6 +7,7 @@ body{
 }
 input, select, textarea {
     font: inherit;
+    outline: none;
 }
 
 #container {
@@ -110,7 +111,7 @@ textarea {
     float: right;
     font-size: 16px;
 }
-button {
+.submit button {
     border: 2px solid #059fa5;
     border-radius: 0.6em;
     cursor: pointer;
@@ -125,13 +126,13 @@ button {
     float: left;
     font-size: 16px;
 }
-button:hover, button:focus {
+.submit button:hover, .submit button:focus {
     color: #fff;
     outline: 0;
     background-position: 0;
     background-color: #059fa5;
 }
-.btn {
+.submit .btn {
     color: white;
     padding: 11px 13px;
     font-size: 25px;
@@ -147,9 +148,14 @@ button:hover, button:focus {
     color: #059fa5;
     transition: background 300ms ease-in-out;
 }
-button:hover, button:focus {
+.submit button:hover, .submit button:focus {
     color: #fff;
     outline: 0;
     background-position: 0;
     background-color: #059fa5;
+}
+#selectedIMG{
+    background-color: #1f9812;
+    color:  #efefef;
+    border: 2px solid #1f9812;
 }
