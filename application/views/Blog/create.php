@@ -1,11 +1,11 @@
 <div id="container">
     <h1> Create new blog</h1>
-    <div class="underline">
-    </div>
+    <div class="underline"></div>
     <form action="<?php echo $_SERVER['REQUEST_URI'];?>" method="post">
+        <input id="file-input" type="file", name="file-input" accept=".png, .jpg, .jpeg" style="display: none">
         <div class="telephone">
             <label for="name"></label>
-            <input maxlength="180" type="text" style="padding: 12px 20px; margin: 8px 0" name="title" regex="[A-Za-zА-Яа-я0-9 ]" minlength="5" placeholder="Enter title" required>
+            <input maxlength="180" type="text" name="title" regex="[A-Za-zА-Яа-я0-9 ]" minlength="5" placeholder="Enter title" required>
         </div>
         <div class="subject">
             <label for="subject"></label>
@@ -26,3 +26,9 @@
         </div>
     </form><!-- // End form -->
 </div><!-- // End #container -->
+
+<script>
+    $('.btn').click(function () {
+        $('#file-input').trigger('click');
+    });
+</script>
