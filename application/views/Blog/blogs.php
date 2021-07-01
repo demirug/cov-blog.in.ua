@@ -32,7 +32,7 @@
         <?php for($i = 0; $i < count($blogs); $i++): ?>
             <div class="blog-card <?php if($i % 2 === 0) echo "alt"?>">
                 <div class="meta">
-                    <div class="photo" style="background-image: url('/public/images/blog/defaultImage.jpg')"></div>
+                    <div class="photo" style="background-image: url(<?php echo file_exists("public/images/userdata/blogs/" . $blogs[$i]["blogid"] . ".png") ? "/public/images/userdata/blogs/" . $blogs[$i]["blogid"] . ".png" : "/public/images/blog/defaultImage.jpg" ?>)"></div>
                     <ul class="details">
 
                         <li class="date"><?php echo $blogs[$i]['createDate']; ?></li>
