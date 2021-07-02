@@ -43,7 +43,7 @@ class Account_Controller extends Controller
             return;
         }
 
-        $this->view->render('Login page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/account.css"]);
+        $this->view->render('Login page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/Account/account.css"]);
     }
 
     public function register_Action() {
@@ -68,7 +68,40 @@ class Account_Controller extends Controller
             return;
         }
 
-        $this->view->render('Register page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/account.css"]);
+        $this->view->render('Register page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/Account/account.css"]);
     }
+
+    public function settings_Action($args) {
+
+        if(!isset($_SESSION["userID"])) {
+            View::error(403);
+        }
+
+        if(!empty($_POST)) {
+
+            if($_FILES['file-input']['size'] != 0) { //If file exists
+
+                //If size of file large than 2MB
+                if ($_FILES['file-input']['size'] > 2097152) {
+                    View::sendMessage("Warning", "Image size cant be bigger than 2mb", 3);
+                }
+
+                $extension = pathinfo($_FILES['file-input']['name'], PATHINFO_EXTENSION);
+
+                if ($extension != "png" && $extension !== "jpg" && $extension !== "jpeg") {
+                    View::sendMessage("Warning", "Allowed formats only png and jpg", 3);
+                }
+
+                $url = "public/images/userdata/avatars/" . $_SESSION['userID'] . ".png";
+
+                imagepng(imagecreatefromstring(file_get_contents($_FILES['file-input']['tmp_name'])), $url);
+            }
+
+            View::sendMessage('Done', 'done', 1);
+        } else {
+            $this->view->render("Settings", ["userID" => $_SESSION["userID"]], ["/public/js/formHandler.js"], ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "/public/styles/Account/settings.css"]);
+        }
+    }
+
 
 }
