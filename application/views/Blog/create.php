@@ -21,14 +21,16 @@
             <textarea maxlength="1200" name="description" cols="40" rows="3" placeholder="Enter description" required></textarea>
         </div>
         <div class="submit">
-            <div><button type="button" class="btn" id="selectedIMG"><i class="fa fa-image"></i></button> </div>
+            <div><button type="button" class="btn"><i class="fa fa-image"></i></button> </div>
             <div class="right"><button id="form_button">Submit</button></div>
         </div>
     </form><!-- // End form -->
 </div><!-- // End #container -->
 
 <script>
-    $('.btn').click(function () {
-        $('#file-input').trigger('click');
+    $('.btn').click(function (event) {
+        $('#file-input').trigger('click').change(function () {
+            $(event.currentTarget).prop('id', 'selectedIMG');
+        });
     });
 </script>
