@@ -144,7 +144,7 @@ class Blog_Controller extends Controller
         }
 
         $this->view->render(("View blog of " . $args[1]),
-            ["description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
+            ["userid" => $userID, "description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
             ["/public/js/ckeditor/ckeditor.js", "/public/js/Blog/editRecordButton.js", "/public/js/Blog/addRecordButton.js"],
             ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]
         );
@@ -247,24 +247,24 @@ class Blog_Controller extends Controller
                 View::sendMessage("Error", "Blog with that name already exists", 3);
             }
 
-            $this->model->database->query("INSERT INTO `BlogList` (`userid`, `title`, `description`, `region`) values (:user, :title, :description, :region)", ["user" => $_SESSION['userID'], "title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region']]);
-
-
-            if(isset($_FILES['file-input'])) {
+            if($_FILES['file-input']['size'] != 0) { //If file exists
 
                 //If size of file large than 2MB
-                if($_FILES['file-input']['size'] > 2097152) {
+                if ($_FILES['file-input']['size'] > 2097152) {
                     View::sendMessage("Warning", "Image size cant be bigger than 2mb", 3);
                 }
 
                 $extension = pathinfo($_FILES['file-input']['name'], PATHINFO_EXTENSION);
 
-                if($extension != "png" && $extension !== "jpg" && $extension !== "jpeg") {
+                if ($extension != "png" && $extension !== "jpg" && $extension !== "jpeg") {
                     View::sendMessage("Warning", "Allowed formats only png and jpg", 3);
                 }
+            }
 
+            $this->model->database->query("INSERT INTO `BlogList` (`userid`, `title`, `description`, `region`) values (:user, :title, :description, :region)", ["user" => $_SESSION['userID'], "title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region']]);
+
+            if($_FILES['file-input']['size'] != 0) {
                 $blogID = $this->model->database->lastInsertId();
-
                 imagepng(imagecreatefromstring(file_get_contents($_FILES['file-input']['tmp_name'])), "public/images/userdata/blogs/" . $blogID . ".png");
             }
 
