@@ -24,7 +24,7 @@
 
         <article recordID = "<?php echo $value['recordid'] ?>">
             <div id="by">
-                <img src="https://res.cloudinary.com/doytulo2j/image/upload/v1613146655/harry/harry_o2yl9j.jpg" alt="">
+                <img src="<?php echo file_exists("public/images/userdata/avatars/" . $userid . ".png") ? ("/public/images/userdata/avatars/" . $userid . ".png?nocache=" . time()) : "/public/images/account/avatar.png" ?>" alt="">
                 <p><?php echo $value['title'] ?></p>
             </div>
             <div class="content">
