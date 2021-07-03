@@ -1,5 +1,5 @@
 :root {
-    --avatar: url("/public/images/account/avatar.png");;
+    --avatar: url("/public/images/account/avatar.png");
 }
 body{
     background-image: url("/public/images/blog/blogBackground.png");
@@ -118,7 +118,6 @@ button.rollover{
     border-radius: 50%;
     cursor: pointer;
     background-image: var(--avatar);
-    //background-image: url("https://www.hotfootdesign.co.uk/wp-content/uploads/2016/05/d5jA8OZv.jpg");
     background-size: 200px;
     width: 200px;
     height: 200px;
