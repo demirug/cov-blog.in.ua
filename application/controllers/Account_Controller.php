@@ -64,7 +64,7 @@ class Account_Controller extends Controller
             if($result[0] === 'OK') {
                 $sault = $this->model->generateSault();
 
-                $this->model->database->query("INSERT INTO `Users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => strtolower($_POST['login']), 'hash' => $this->model->hash($_POST['password'], $sault), 'sault' => $sault, 'email' => $_POST['email']]);
+                $this->model->getDataBase()->query("INSERT INTO `Users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => strtolower($_POST['login']), 'hash' => $this->model->hash($_POST['password'], $sault), 'sault' => $sault, 'email' => $_POST['email']]);
 
                 View::sendMessage('Successful', 'Вы успешно зарегистрировались! Теперь авторизуйтесь', 1, 1300, '/login');
 
@@ -93,7 +93,7 @@ class Account_Controller extends Controller
 
                     $user = $this->model->getUserRecord($_SESSION["userName"]);
                     if($this->model->hash($_POST["old_password"], $user["sault"]) === $user["hash"]) {
-                        $this->model->database->query("UPDATE `Users` SET `hash` = :hash WHERE id = :id", ["id" => $_SESSION["userID"], "hash" => $this->model->hash($_POST["new_password"], $user["sault"])]);
+                        $this->model->getDataBase()->query("UPDATE `Users` SET `hash` = :hash WHERE id = :id", ["id" => $_SESSION["userID"], "hash" => $this->model->hash($_POST["new_password"], $user["sault"])]);
                     } else View::sendMessage("Error", "Incorrect old password", 3);
 
                 } else {

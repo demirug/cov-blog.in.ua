@@ -9,11 +9,6 @@ class Account_Model extends Model
 
     public function onInitialize() {}
 
-    public function requireDataBase()
-    {
-        return true;
-    }
-
     //If has troubles with registration exists will be returned error messages else returned OK
     public function checkRegister($login, $password, $confirmPassword, $email) {
 
@@ -42,7 +37,7 @@ class Account_Model extends Model
 
         //----
 
-        $user = $this->database->query('SELECT login FROM Users WHERE login = :login', ['login' => $login])->fetch(\PDO::FETCH_ASSOC);
+        $user = $this->getDataBase()->query('SELECT login FROM Users WHERE login = :login', ['login' => $login])->fetch(\PDO::FETCH_ASSOC);
         if(isset($user) && !empty($user)) {
             array_push($message,'Пользователь с данным логином уже существует');
         } else {
@@ -66,7 +61,7 @@ class Account_Model extends Model
             array_push($message, 'Некорректный email адресс');
         }
 
-        $user = $this->database->query('SELECT email FROM Users WHERE email = :email', ['email' => $email])->fetch(\PDO::FETCH_ASSOC);
+        $user = $this->getDataBase()->query('SELECT email FROM Users WHERE email = :email', ['email' => $email])->fetch(\PDO::FETCH_ASSOC);
 
         if(isset($user) && !empty($user)) {
             array_push($message,'Данный email уже используется');
@@ -134,7 +129,7 @@ class Account_Model extends Model
 
     //Returned sql row with user data from database
     public function getUserRecord($login) {
-        return $this->database->query('SELECT id, permissionLevel, hash, sault FROM Users WHERE login = :login', ['login' => strtolower($login)])->fetch(\PDO::FETCH_ASSOC);
+        return $this->getDataBase()->query('SELECT id, permissionLevel, hash, sault FROM Users WHERE login = :login', ['login' => strtolower($login)])->fetch(\PDO::FETCH_ASSOC);
     }
 
     function generateSault() {

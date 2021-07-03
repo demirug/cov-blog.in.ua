@@ -200,7 +200,7 @@ class Blog_Controller extends Controller
                 View::sendMessage("Error", $errors, 3);
             }
 
-            $this->model->database->query("INSERT INTO `BlogRecords` (`blogid`, `title`, `text`) values ($blogID, :title, :text)", ["title" => $_POST['title'], "text" => $_POST['text']]);
+            $this->model->getDataBase()->query("INSERT INTO `BlogRecords` (`blogid`, `title`, `text`) values ($blogID, :title, :text)", ["title" => $_POST['title'], "text" => $_POST['text']]);
 
             $blogConfig = require 'application/config/blog.php';
             $pagination = new Pagination($this->model->getRecordsCount($blogID), $blogConfig['blog-view']);
@@ -261,10 +261,10 @@ class Blog_Controller extends Controller
                 }
             }
 
-            $this->model->database->query("INSERT INTO `BlogList` (`userid`, `title`, `description`, `region`) values (:user, :title, :description, :region)", ["user" => $_SESSION['userID'], "title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region']]);
+            $this->model->getDataBase()->query("INSERT INTO `BlogList` (`userid`, `title`, `description`, `region`) values (:user, :title, :description, :region)", ["user" => $_SESSION['userID'], "title" => $_POST['title'], "description" => $_POST['description'], "region" => $_POST['region']]);
 
             if($_FILES['file-input']['size'] != 0) {
-                $blogID = $this->model->database->lastInsertId();
+                $blogID = $this->model->getDataBase()->lastInsertId();
                 imagepng(imagecreatefromstring(file_get_contents($_FILES['file-input']['tmp_name'])), "public/images/userdata/blogs/" . $blogID . ".png");
             }
 
@@ -333,7 +333,7 @@ class Blog_Controller extends Controller
             View::sendMessage("Error", $errors, 3);
         }
 
-        $this->model->database->query("UPDATE BlogRecords SET title = :title, text = :text WHERE blogid = :blogid AND recordid = :recordid", ["title" => $_POST['title'], "text" => $_POST['text'], "blogid" => $blogID, "recordid" => $args[0]]);
+        $this->model->getDataBase()->query("UPDATE BlogRecords SET title = :title, text = :text WHERE blogid = :blogid AND recordid = :recordid", ["title" => $_POST['title'], "text" => $_POST['text'], "blogid" => $blogID, "recordid" => $args[0]]);
 
         View::sendJson(["status" => "OK"]);
     }
