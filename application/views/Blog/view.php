@@ -24,7 +24,9 @@
 
         <article recordID = "<?php echo $value['recordid'] ?>">
             <div id="by">
-                <img src="<?php echo file_exists("public/images/userdata/avatars/" . $userid . ".png") ? ("/public/images/userdata/avatars/" . $userid . ".png?nocache=" . time()) : "/public/images/account/avatar.png" ?>" alt="">
+                <a href="/blogs/<?php echo $userName; ?>">
+                    <img src="<?php echo file_exists("public/images/userdata/avatars/" . $userid . ".png") ? ("/public/images/userdata/avatars/" . $userid . ".png?nocache=" . time()) : "/public/images/account/avatar.png" ?>" alt="">
+                </a>
                 <p><?php echo $value['title'] ?></p>
             </div>
             <div class="content">

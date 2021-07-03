@@ -144,7 +144,7 @@ class Blog_Controller extends Controller
         }
 
         $this->view->render(("View blog of " . $args[1]),
-            ["userid" => $userID, "description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
+            ["userid" => $userID, "userName" => $args[0], "description" => $description, "blogid" => $blogID, "canEdit" => $canEdit, "results" => $result, "page" => $pageNumber, "title" => str_replace('-', ' ', $args[1])],
             ["/public/js/ckeditor/ckeditor.js", "/public/js/Blog/editRecordButton.js", "/public/js/Blog/addRecordButton.js"],
             ["/public/styles/pagination.css", "/public/styles/Blog/blogView.css"]
         );
