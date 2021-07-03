@@ -15,15 +15,10 @@ class Account_Model extends Model
     }
 
     //If has troubles with registration exists will be returned error messages else returned OK
-    public function checkRegister() {
+    public function checkRegister($login, $password, $confirmPassword, $email) {
 
         $settings = require 'application/config/authorization.php';
         $message = array();
-
-        $login = $_POST['login'];
-        $password = $_POST['password'];
-        $confirmPassword = $_POST['conf_password'];
-        $email = $_POST['email'];
 
 
         //-----
@@ -36,11 +31,11 @@ class Account_Model extends Model
                 array_push($message, 'Слишком короткий пароль. Минимальная длина ' . $settings['min-password-length'] . ' символов');
             }
 
-            if (strlen($login) > $settings['max-password-length']) {
-                array_push($message, 'Слишком длинный логин. Максимальная длина ' . $settings['max-password-length'] . ' символов');
+            if (strlen($password) > $settings['max-password-length']) {
+                array_push($message, 'Слишком длинный пароль. Максимальная длина ' . $settings['max-password-length'] . ' символов');
             }
 
-            if (!preg_match($settings['password-filter'], $login)) {
+            if (!preg_match($settings['password-filter'], $password)) {
                 array_push($message, 'Пароль содержит недопустимые символы. Допустимо только латинский алфавит и цифры');
             }
         }
@@ -87,20 +82,59 @@ class Account_Model extends Model
         return $message;
     }
 
-    //If user with login and password founded returned his id and permission level else return -1
-    public function checkLogin() {
-        $login = $_POST['login'];
-        $password = $_POST['password'];
+    public function checkSettings($oldPassword, $password, $passwordRepeat) {
 
-        $user = $this->database->query('SELECT id, permissionLevel, hash, sault FROM Users WHERE login = :login', ['login' => strtolower($login)])->fetch(\PDO::FETCH_ASSOC);
-        
-        if(isset($user) && !empty($user)) {
+        $message = array();
 
-            if($this->hash($_POST['password'], $user['sault']) === $user['hash']) {
-                return array($user['id'], $user['permissionLevel']);
-            } else return -1;
-        } else return -1;
+        if($oldPassword === "" && $password === "" && $passwordRepeat === "") {
+            array_push($message, "EMPTY");
+            return $message;
+        }
 
+        if($oldPassword === "" || $password === "" || $passwordRepeat === "") {
+            array_push($message, "Все поля должны быть заполнены");
+            return $message;
+        }
+
+        $settings = require 'application/config/authorization.php';
+
+
+        if($password !== $passwordRepeat) {
+            array_push($message,'Пароли не совпадают');
+        } else {
+
+            if (strlen($password) < $settings['min-password-length']) {
+                array_push($message, 'Слишком короткий пароль. Минимальная длина ' . $settings['min-password-length'] . ' символов');
+            }
+
+            if (strlen($password) > $settings['max-password-length']) {
+                array_push($message, 'Слишком длинный пароль. Максимальная длина ' . $settings['max-password-length'] . ' символов');
+            }
+
+            if (strlen($oldPassword) < $settings['min-password-length']) {
+                array_push($message, 'Слишком короткий старый пароль. Минимальная длина ' . $settings['min-password-length'] . ' символов');
+            }
+
+            if (strlen($oldPassword) > $settings['max-password-length']) {
+                array_push($message, 'Слишком длинный старый пароль. Максимальная длина ' . $settings['max-password-length'] . ' символов');
+            }
+
+            if (!preg_match($settings['password-filter'], $password)) {
+                array_push($message, 'Пароль содержит недопустимые символы. Допустимо только латинский алфавит и цифры');
+            }
+        }
+
+        if(empty($message)) {
+            array_push($message, 'OK');
+        }
+
+        return $message;
+
+    }
+
+    //Returned sql row with user data from database
+    public function getUserRecord($login) {
+        return $this->database->query('SELECT id, permissionLevel, hash, sault FROM Users WHERE login = :login', ['login' => strtolower($login)])->fetch(\PDO::FETCH_ASSOC);
     }
 
     function generateSault() {
