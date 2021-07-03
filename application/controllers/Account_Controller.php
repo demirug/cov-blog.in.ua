@@ -29,21 +29,26 @@ class Account_Controller extends Controller
 
         if(!empty($_POST)) {
 
-            $result = $this->model->checkLogin();
+            $user = $this->model->getUserRecord($_POST["login"]);
 
-            if($result !== -1) {
+            if(isset($user) && !empty($user)) {
 
-                $_SESSION["userName"] = strtolower($_POST['login']);
-                $_SESSION["userID"] = $result[0];
-                $_SESSION["permissionLevel"] =  $result[1];
-                View::location('/');
+                if($this->model->hash($_POST["password"], $user["sault"]) === $user["hash"]) {
+                    $_SESSION["userName"] = strtolower($_POST['login']);
+                    $_SESSION["userID"] = $user["id"];
+                    $_SESSION["permissionLevel"] =  $user["permissionLevel"];
+                    View::location('/');
+                } else {
+                    View::sendMessage('Error', "Неверный логин или пароль", 3);
+                }
 
-            } else  View::sendMessage('Error', "Неверный логин или пароль", 3);
+            } else {
+                View::sendMessage('Error', "Неверный логин или пароль", 3);
+            }
 
-            return;
+        } else {
+            $this->view->render('Login page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/Account/account.css"]);
         }
-
-        $this->view->render('Login page', [], ['/public/js/patternHandler.js', '/public/js/formHandler.js'], ["/public/styles/Account/account.css"]);
     }
 
     public function register_Action() {
@@ -54,7 +59,7 @@ class Account_Controller extends Controller
 
         if(!empty($_POST)) {
 
-            $result = $this->model->checkRegister(); //Return error is exists or OK message
+            $result = $this->model->checkRegister($_POST["login"], $_POST["password"], $_POST["conf_password"], $_POST["email"]); //Return error is exists or OK message
 
             if($result[0] === 'OK') {
                 $sault = $this->model->generateSault();
@@ -79,25 +84,44 @@ class Account_Controller extends Controller
 
         if(!empty($_POST)) {
 
+
+            $result  = $this->model->checkSettings($_POST["old_password"], $_POST["new_password"], $_POST["new_password_repeat"]);
+
+            if($result[0] !== "EMPTY") {
+
+                if($result[0] === "OK") {
+
+                    $user = $this->model->getUserRecord($_SESSION["userName"]);
+                    if($this->model->hash($_POST["old_password"], $user["sault"]) === $user["hash"]) {
+                        $this->model->database->query("UPDATE `Users` SET `hash` = :hash WHERE id = :id", ["id" => $_SESSION["userID"], "hash" => $this->model->hash($_POST["new_password"], $user["sault"])]);
+                    } else View::sendMessage("Error", "Incorrect old password", 3);
+
+                } else {
+                    View::sendMessage("Error", $result, 3);
+                }
+
+            }
+
             if($_FILES['file-input']['size'] != 0) { //If file exists
 
                 //If size of file large than 2MB
                 if ($_FILES['file-input']['size'] > 2097152) {
-                    View::sendMessage("Warning", "Image size cant be bigger than 2mb", 3);
+                    return;
                 }
 
                 $extension = pathinfo($_FILES['file-input']['name'], PATHINFO_EXTENSION);
 
-                if ($extension != "png" && $extension !== "jpg" && $extension !== "jpeg") {
-                    View::sendMessage("Warning", "Allowed formats only png and jpg", 3);
+                if ($extension == "png" || $extension !== "jpg" || $extension !== "jpeg") {
+
+
+                    $url = "public/images/userdata/avatars/" . $_SESSION['userID'] . ".png";
+
+                    imagepng(imagecreatefromstring(file_get_contents($_FILES['file-input']['tmp_name'])), $url); //Converting file to png and saved it
                 }
-
-                $url = "public/images/userdata/avatars/" . $_SESSION['userID'] . ".png";
-
-                imagepng(imagecreatefromstring(file_get_contents($_FILES['file-input']['tmp_name'])), $url);
             }
 
-            View::sendMessage('Done', 'done', 1);
+            View::sendMessage("Success", "Your account have been updated", 1, 1500, "/account/settings");
+
         } else {
             $this->view->render("Settings", ["userID" => $_SESSION["userID"]], ["/public/js/formHandler.js"], ["https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css", "/public/styles/Account/settings.css"]);
         }
