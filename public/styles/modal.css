@@ -65,6 +65,10 @@
 
 .modal-body {padding: 2px 16px;}
 
+.modal-body p {
+    color: black;
+}
+
 .modal-footer {
     padding: 2px 0px;
 
