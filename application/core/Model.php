@@ -7,18 +7,13 @@ use application\libs\DataBase;
 abstract class Model
 {
 
-    public $database;
-
-    public function __construct()
-    {
-
-        if($this->requireDataBase() === true) {
-            $this->database = new DataBase();
-        }
-
-    }
+    private static $database;
 
     public abstract function onInitialize();
-    public abstract function requireDataBase();
+
+    public function getDataBase() {
+        if(!isset(Model::$database)) Model::$database = new DataBase();
+        return Model::$database;
+    }
 
 }
