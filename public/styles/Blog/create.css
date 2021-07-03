@@ -1,5 +1,5 @@
 body{
-    background-image: url("https://res.cloudinary.com/doytulo2j/image/upload/v1619438021/%D0%BA%D0%BE%D1%80%D0%BE%D0%BD%D0%B0/9_rlm2zo.png");
+    background-image: url("/public/images/blog/blogBackground.png");
     background-size: cover;
     background-attachment: fixed;
     margin:0;
