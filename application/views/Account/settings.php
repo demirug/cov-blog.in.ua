@@ -35,7 +35,23 @@
     $('#file-input-btn').click(function () {
         $('#file-input').trigger('click').change(function () {
             var extension = this.files[0].name.split('.').pop().toLowerCase();
-            if(extension != 'png' && extension != 'jpg') return;
+            if(extension != 'png' && extension != 'jpg') {
+                showMessage("Warning", "Allowed formats only png and jpg", 3);
+                this.type = "text";
+                this.type = "file";
+
+                <?php if(file_exists("public/images/userdata/avatars/" . $userID . ".png")):?>
+                    document.documentElement.style.setProperty('--avatar', 'url("/public/images/userdata/avatars/<?php echo $userID . ".png?nocache=" . time(); ?>")');
+                <?php else: ?>
+                    document.documentElement.style.setProperty('--avatar', "url('/public/images/account/avatar.png')");
+                <?php endif; ?>
+                return;
+            }
+
+            if(this.files[0].size > 2097152) {
+                showMessage("Warning", "Image size cant be bigger than 2mb", 3);
+                return;
+            }
 
             var reader = new FileReader();
             reader.onload = function(e) {
