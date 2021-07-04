@@ -338,16 +338,5 @@ class Blog_Controller extends Controller
         View::sendJson(["status" => "OK"]);
     }
 
-    // /settings/{blogid}
-    public function settings_Action($args) {
-        $argsLength = count($args);
-
-
-        $this->view->render('Settings blog',
-            ["blogName" => "test", "blogRegion" => "kiev", "blogDescription" => "test description"],
-            ["/public/js/formHandler.js"]);
-
-    }
-
 
 }
