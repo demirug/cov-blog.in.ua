@@ -33,7 +33,7 @@ class Account_Controller extends Controller
 
             if(isset($user) && !empty($user)) {
 
-                if($this->model->hash($_POST["password"], $user["sault"]) === $user["hash"]) {
+                if($this->model->hash($_POST["password"], $user["salt"]) === $user["hash"]) {
                     $_SESSION["userName"] = strtolower($_POST['login']);
                     $_SESSION["userID"] = $user["id"];
                     $_SESSION["permissionLevel"] =  $user["permissionLevel"];
@@ -62,9 +62,9 @@ class Account_Controller extends Controller
             $result = $this->model->checkRegister($_POST["login"], $_POST["password"], $_POST["conf_password"], $_POST["email"]); //Return error is exists or OK message
 
             if($result[0] === 'OK') {
-                $sault = $this->model->generateSault();
+                $salt = $this->model->generateSalt();
 
-                $this->model->getDataBase()->query("INSERT INTO `Users` (`login`, `hash`, `sault`, `email`) VALUES (:login , :hash, :sault, :email)", ['login' => strtolower($_POST['login']), 'hash' => $this->model->hash($_POST['password'], $sault), 'sault' => $sault, 'email' => $_POST['email']]);
+                $this->model->getDataBase()->query("INSERT INTO `Users` (`login`, `hash`, `salt`, `email`) VALUES (:login , :hash, :salt, :email)", ['login' => strtolower($_POST['login']), 'hash' => $this->model->hash($_POST['password'], $salt), 'salt' => $salt, 'email' => $_POST['email']]);
 
                 View::sendMessage('Successful', 'Вы успешно зарегистрировались! Теперь авторизуйтесь', 1, 1300, '/login');
 
@@ -92,8 +92,8 @@ class Account_Controller extends Controller
                 if($result[0] === "OK") {
 
                     $user = $this->model->getUserRecord($_SESSION["userName"]);
-                    if($this->model->hash($_POST["old_password"], $user["sault"]) === $user["hash"]) {
-                        $this->model->getDataBase()->query("UPDATE `Users` SET `hash` = :hash WHERE id = :id", ["id" => $_SESSION["userID"], "hash" => $this->model->hash($_POST["new_password"], $user["sault"])]);
+                    if($this->model->hash($_POST["old_password"], $user["salt"]) === $user["hash"]) {
+                        $this->model->getDataBase()->query("UPDATE `Users` SET `hash` = :hash WHERE id = :id", ["id" => $_SESSION["userID"], "hash" => $this->model->hash($_POST["new_password"], $user["salt"])]);
                     } else View::sendMessage("Error", "Incorrect old password", 3);
 
                 } else {

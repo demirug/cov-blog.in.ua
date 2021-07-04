@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS Users (
                                      `id` int NOT NULL AUTO_INCREMENT,
                                      `login` varchar(32) NOT NULL UNIQUE,
                                      `hash` varchar(256) NOT NULL,
-                                     `sault` varchar(16) NOT NULL,
+                                     `salt` varchar(16) NOT NULL,
                                      `email` varchar(320) NOT NULL,
                                      `permissionLevel` TINYINT DEFAULT 0,
                                      `registerDate` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

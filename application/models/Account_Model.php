@@ -123,16 +123,17 @@ class Account_Model extends Model
             array_push($message, 'OK');
         }
 
+
         return $message;
 
     }
 
     //Returned sql row with user data from database
     public function getUserRecord($login) {
-        return $this->getDataBase()->query('SELECT id, permissionLevel, hash, sault FROM Users WHERE login = :login', ['login' => strtolower($login)])->fetch(\PDO::FETCH_ASSOC);
+        return $this->getDataBase()->query('SELECT id, permissionLevel, hash, salt FROM Users WHERE login = :login', ['login' => strtolower($login)])->fetch(\PDO::FETCH_ASSOC);
     }
 
-    function generateSault() {
+    function generateSalt() {
         $charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789/\\][{}\'";:?.>,<!@#$%^&*()-_=+|';
         $randStringLen = 16;
 
@@ -144,9 +145,9 @@ class Account_Model extends Model
         return $randString;
     }
 
-    public function hash($password, $sault) {
+    public function hash($password, $salt) {
 
-        $hash = $password . $sault;
+        $hash = $password . $salt;
 
         for($i = 0; $i < 10; $i++) {
             $hash = hash('sha256', $hash);
